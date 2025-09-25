@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>CollSched</title>
+  <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+  <link rel="shortcut icon" href="favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="CollSched">
+  <!-- <link rel="manifest" href="favicon/site.webmanifest"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <style>
+@font-face {font-family: n; src: url(n.otf);}
+@font-face {font-family: s; src: url(fa-solid-900.woff2);}
+@font-face {font-family: b; src: url(fa-brands-400.woff2);}
+
+::selection {color: #fff; background: #596e79;}
+html {position: relative;}
+@keyframes fade-in {0% {opacity: 0;}}
+body {color: #212529; font-weight: 300;
+  font-family: 'Alegreya Sans SC', system-ui; min-height: calc(100dvh - 2.5em);
+  padding-bottom: 2.5em; margin: 0 .75em; display: flex; flex-flow: column;
+  justify-content: center; animation: .75s cubic-bezier(.75,0,.75,.9) fade-in;}
+@media (width>=36em) {body {width: 32.25em; margin-inline: auto;}}
+@media (width>=48em) {body {width: 43.5em;}}
+@media (width>=62em) {body {width: 58.5em;}}
+
+a {-webkit-tap-highlight-color: #0000; outline: 0;}
+.ib {font-size: inherit; line-height: 1.5; font-family: inherit;
+  padding: .625em .75em; border: .0625em solid; border-radius: .5em;}
+.i {color: inherit; font-weight: inherit; width: 100%; border-color: #bec3c9;
+  box-sizing: border-box; transition: border-color .15s;}
+.i:focus {border-color: #596e79; outline: 0;}
+button {-webkit-tap-highlight-color: #0000;}
+
+h1 {font-size: 2.25em; width: fit-content; margin-inline: auto;
+  position: relative;}
+h1::before {content: ''; background: #f0ece3; height: 25%;
+  border-radius: 0 0 .15em .15em; position: absolute; inset-inline: 0;
+  bottom: 16.666667%; z-index: -1; transition: height .15s;}
+h1:has(>:focus-visible,>:hover)::before {height: 50%;}
+h1>a {color: #596e79; text-decoration: none; display: block;}
+
+header>p {font-size: 1.25em; line-height: 1.5;}
+[dir=rtl] {color: #828a91; font-family: n;}
+[dir=rtl]>:is(strong,b) {color: #212529;}
+[dir=rtl]>span {color: #495057;}
+h1+p+p {font-style: italic; font-weight: 200;}
+h1+p+p>span {font-weight: 300;}
+code {background: #f8f9fa; font-family: inherit; padding-inline: .1875em;
+  border-radius: .25em;}
+
+form {margin-bottom: 1em; display: grid; gap: .625em;}
+label:has(>span) {position: relative;}
+label>span {color: #6c757d; text-overflow: ellipsis; white-space: nowrap;
+  max-width: calc(100% - 1.625em); padding-inline: .25em; overflow: hidden;
+  position: absolute; transform-origin: 0; translate: .5625em -50%;
+  transition: color .15s, background .15s, top .15s, translate .15s, scale .15s;
+  -webkit-user-select: none; user-select: none; pointer-events: none;}
+label>span:not(.lu) {top: 50%;}
+span.lu {background: var(--g,#fff); top: 0; translate: .625em -50%; scale: .75;}
+label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
+
+.d {box-shadow: .3em .3em .3em #0003; font-size: .9em; line-height: 1.7361;
+  max-width: min(25em,calc(100% - 3.2639em - 26px));
+  padding: .8333em .5556em .8333em 2.7083em; border: .069445em solid #bec3c9;
+  outline: 0; border-radius: .5em; z-index: 1; translate: 0 1.770834em;}
+.d::before {position: absolute; left: .5556em;}
+.d0::before {content: '!'; color: #fff; background: #ff8c00; font-weight: 700;
+  text-align: center; width: 1.7361em; border-radius: .25em;}
+.d1::before {content: '\f058'; color: #596e79; font-family: s; scale: 1.7361;
+  transform-origin: 0;}
+
+button:not(:has(.ld)):disabled {opacity: .65;}
+.b {color: #f0ece3; background: #596e79; border-color: #0000;
+  transition: background .15s;}
+.b:focus-visible {outline: .1875em solid;}
+.b:enabled:hover {background: #647b87;}
+.b:enabled:active {background: #4e606a;}
+.b::before {content: '\2b'; font-family: s; vertical-align: bottom;}
+.bs::before {content: '\f00c';}
+@media (width>=36em) {form {grid-template-columns: 1fr 1fr;}
+  .b {grid-column: 1/-1;}}
+
+:has(>table) {overflow: auto; margin-bottom: 1em;}
+table {border-spacing: 0; width: 100%; border: .0625em solid #bec3c9;
+  border-radius: 1em;}
+th, td {text-align: center; padding: .625em;}
+th {font-weight: 500;}
+tbody>:nth-child(n+2)>* {border-top: .0625em solid #bec3c9;}
+td {text-align: center; white-space: nowrap;}
+
+:is(table,p) .i {appearance: textfield; text-align: center; width: 3em;
+  aspect-ratio: 1.618034; padding: 0;}
+:is(table,p) .i::-webkit-inner-spin-button {display: none;}
+
+.be, .bd {background: 0; padding: .375em .75em; border-color: #0000;
+  transition: color .15s, background .15s;}
+.be {color: #17a2b8;}
+.be:focus-visible {outline: .0625em solid #0baccc;}
+.be:hover {color: #fff; background: #17a2b8;}
+.be:active {color: #fff; background: #117c8d;}
+.be::before {content: '\f044'; font-family: s;}
+.bd {color: #dc3545;}
+.bd:focus-visible {outline: .0625em solid #e15361;}
+.bd:hover {color: #fff; background: #dc3545;}
+.bd:active {color: #fff; background: #a52834;}
+.bd::before {content: '\f1f8'; font-family: s;}
+
+h2 {font-size: 1.25em; margin-block: 0; display: inline-block;}
+h2+p {margin-block: 0; display: inline-block;}
+p:has(>.i) {margin-top: .5em;}
+
+template+ol {padding-left: 0; list-style: none;}
+ol tr>:nth-child(n+2) {border-left: .0625em solid #bec3c9;}
+
+footer {margin-block: .25em; display: flex; flex-flow: wrap;
+  justify-content: center; align-items: center; position: absolute;
+  inset: auto 0 0;}
+footer>ul {list-style: none; padding-left: 0; margin-block: 0; display: flex;}
+footer a {color: inherit; line-height: 2em; font-family: b; text-align: center;
+  width: 2em; display: block;}
+footer a:not(:focus-visible,:hover) {text-decoration: none;}
+footer ::before {vertical-align: bottom;}
+footer [href$=com]::before {content: 'AY'; font-size: .75em;}
+footer [href*=github]::before {content: '\f09b';}
+footer [href*=linkedin]::before {content: '\f08c';}
+footer [href*=wa]::before {content: '\f232';}
+footer>small {color: #000; padding-inline: .6em;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="#">CollSched</a></h1>
+    <p dir="rtl">بتسجل مواد للترم الجاي؟ دخل موادك <strong>المجموعة الأَولى فالأَولى</strong>. هتلاقي الجداول <b>الأقل أيام</b> لو كل المواد مطلوبة، أو الجداول <b>الأكتر وحدات\مواد</b> — الخلية فوق ع الشمال.<br>
+  عدل المثال: <span>MATH 101-02 (3) — 34,35,64,65</span>. (<code>34 = الصف 3، العمود 4</code>)
+    </p>
+    <p>Registering courses for next term? Add courses with the <strong>most important section first</strong>, then the next most important, and so on. You will see schedules with the <b>fewest days</b> if all courses are required, or schedules with the <b>most credits/courses</b> — top-left cell.<br>
+      Edit the example: <span>MATH 101-02 (3) — 34,35,64,65</span>. (<code>34 = row 3, col 4</code>)
+    </p>
+  </header>
+  <main>
+    <form>
+      <label><span>Course</span>
+        <input name="c" class="ib i">
+      </label>
+      <label><span>Section</span>
+        <input name="s" class="ib i">
+      </label>
+      <label><span>Credits</span>
+        <input type="number" name="u" min=".5" max="8" step=".5" class="ib i">
+      </label>
+      <label><span>Periods</span>
+        <input name="P" class="ib i">
+      </label>
+      <dialog class="d d0"></dialog>
+      <button class="ib b">&nbsp;Add</button>
+    </form>
+    <div>
+      <div><table><tbody></tbody></table></div>
+      <h2>Courses:</h2>
+      <p></p>
+      <p>Require first <input type="number" class="ib i"></p>
+      <template>
+        <li><table><tbody>
+          <tr><td></td><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr>
+          <tr><th>Sat</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Sun</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Mon</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Tue</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Wed</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Thu</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Fri</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody></table></li>
+      </template>
+      <ol></ol>
+    </div>
+  </main>
+  <footer>
+    <ul>
+      <li><a href="https://ahmadyascene.com" target="_blank"></a></li>
+      <li><a href="https://github.com/ahmadyascene" target="_blank"></a></li>
+      <li><a href="https://linkedin.com/in/ahmadyascene" target="_blank"></a></li>
+      <li><a href="https://wa.me/+201063582917" target="_blank"></a></li>
+    </ul>
+    <small>&copy; 2025 Ahmad Yascene</small>
+  </footer>
+  <script>
+'use strict';
+const f=document.forms[0], d=f.querySelector('dialog'),
+  b=f.querySelector('button'), t=document.querySelector('tbody'),
+  ni=document.querySelector('p>.i'), T=document.querySelector('template').content,
+  ol=document.querySelector('template+ol'),
+  I=JSON.parse(localStorage.getItem('I'))||[
+    {c:'MATH 101',P:['34','35','64','65'],u:3,s:'02'},
+    // {c:'MTE 211',P:['15','16','45','46'],u:2,s:61},
+    // {c:'MTE 211',P:['17','18','47','48'],u:2,s:62},
+    // {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:61},
+    // {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:62},
+    // {c:'MTE 226',P:['24','25','26','54','55','56'],u:3,s:63},
+    // {c:'MTE 156',P:['11','12','13','41','42'],u:3,s:61},
+    // {c:'MTE 156',P:['21','22','23','51','52'],u:3,s:62},
+    // {c:'MTE 156',P:['24','25','53','54','55'],u:3,s:63},
+    // {c:'ENG 172',P:['11','12','41','42'],u:2,s:61},
+    // {c:'ENG 172',P:['13','14','43','44'],u:2,s:62},
+    // {c:'ENG 172',P:['15','16','45','46'],u:2,s:63},
+    // {c:'MTE 250',P:['31','32','33','34','35','36','37'],u:3,s:1},
+    // {c:'MTE 250',P:['18','28','36','37','38','48','58'],u:3,s:2},
+    // {c:'MTE 213',P:['13','14','43','44'],u:2,s:61},
+    // {c:'MTE 213',P:['23','24','53','54'],u:2,s:62},
+    // {c:'MTE 213',P:['25','26','55','56'],u:2,s:63},
+    // {c:'MTE 244',P:['14','15','16'],u:1,s:61},
+    // {c:'MTE 244',P:['21','22','23'],u:1,s:62},
+    // {c:'MTE 244',P:['24','25','26'],u:1,s:63},
+    // {c:'MTE 244',P:['51','52','53'],u:1,s:64},
+    // {c:'MTE 244',P:['54','55','56'],u:1,s:65},
+    // {c:'ENG 173',P:['13','14','43','44'],u:2,s:61},
+    // {c:'ENG 173',P:['21','22','51','52'],u:2,s:62},
+    // {c:'MTE 251',P:['17','18','47','48'],u:2},
+    // {c:'MTE 241',P:['14','15','16'],u:2},
+    // {c:'MNG 201',P:['11','12','13'],u:2,s:21},
+    // {c:'MNG 201',P:['15','16','17'],u:2,s:22},
+    // {c:'MNG 201',P:['21','22','23'],u:2,s:23},
+    // {c:'MNG 201',P:['25','26','27'],u:2,s:24},
+    // {c:'MNG 201',P:['31','32','33'],u:2,s:25},
+    // {c:'MNG 201',P:['35','36','37'],u:2,s:26},
+    // {c:'MNG 201',P:['41','42','43'],u:2,s:27},
+    // {c:'MNG 201',P:['45','46','47'],u:2,s:28},
+    // {c:'MNG 201',P:['51','52','53'],u:2,s:29},
+    // {c:'MNG 201',P:['55','56','57'],u:2,s:30},
+    // {c:'MEC 256',P:['11','12','41','42'],u:3,s:21},
+    // {c:'MEC 256',P:['13','14','43','44'],u:3,s:22},
+    // {c:'MEC 256',P:['17','18','47','48'],u:3,s:23},
+    // {c:'ENG 277',P:['31','32','33','34'],u:3,s:61},
+    // {c:'ENG 277',P:['35','36','37','38'],u:3,s:62}
+  ],
+  cd=r=>{const D=[];
+    for (const {P} of r.slice(1)) for (const [d] of P)
+      if (!D.includes(d)) D.push(d);
+    return D.length;},
+  render=()=>{
+    if (I.length) {const L=[[]], C=[], R=[], O=[]; let rows='', tL;
+      ol.parentElement.hidden=false;
+      for (const [i,{c,P,u,s}] of I.entries()) rows+=`<tr>
+        <td><input type=number value=${i+1} class="ib i" data-i=${i}></td>
+        <td>${c}${s?'-'+s:''} (${u}) — ${P}</td>
+        <td><button class="ib be" data-i=${i}>&nbsp;Edit</button></td>
+        <td><button class="ib bd" data-i=${i}>&nbsp;Delete</button></td>
+      </tr>`;
+      t.innerHTML=rows;
+
+      for (const c of I) {
+        if (C.includes(c.c)) {if (!tL||c.c!=C.at(-1)) tL=L.slice();
+          for (const l of tL) for (let i=l.length-1; i>-1; i--) if (c.c==l[i].c) {
+            const nl=l.toSpliced(i,1); nl.push(c); L.push(nl); break;};}
+        else {C.push(c.c); tL=0; for (const l of L) l.push(c);}}
+      ni.parentElement.previousElementSibling.textContent=C.join(', ');
+      Lf:for (const l of L) {const r=[]; let U=0;
+        lf:for (const c of l) {
+          for (const p of c.P) for (const {P} of r) if (P.includes(p))
+            if (C.slice(0,n).includes(c.c)) continue Lf; else continue lf;
+          r.push(c);}
+        for (const {u} of r) U+=u; r.unshift(U); R.push(r);}
+      if (n<C.length) {R.sort((a,b)=>(b.length-1)*b[0]-(a.length-1)*a[0]);
+        Rf:for (const r of R) {
+          Uf:for (const o of O) {
+            rf:for (const rc of r.slice(1)) {
+              for (const oc of o.slice(r.indexOf(rc)))
+                if (rc.c==oc.c&&rc.s==oc.s) continue rf;
+              continue Uf;}
+            continue Rf;}
+          O.push(r);}}
+      else R.sort((a,b)=>cd(a)-cd(b));
+
+      ol.textContent='';
+      for (const o of O.length?O:R) {
+        const t=T.cloneNode(true),
+          rows=t.firstElementChild.firstElementChild.firstElementChild.children;
+        rows[0].children[0].textContent=o[0]+'/'+(o.length-1);
+        for (const {c,P,u,s} of o.slice(1)) {let fp, lp; for (const p of P) {
+          if (p-lp==1) {rows[p[0]].children[p[1]].hidden=true;
+            rows[fp[0]].children[fp[1]].colSpan++;}
+          else {fp=p;
+            rows[p[0]].children[p[1]].textContent=c+(s?'-'+s:'')+' ('+u+')';}
+          lp=p;}}
+        ol.appendChild(t);}
+
+      for (const i of t.querySelectorAll('.i')) i.onchange=()=>{
+        const v=parseInt(i.value);
+        I.splice(v>0?v-1:v<-1?v+1:v==-1?I.length:0,0,I.splice(i.dataset.i,1)[0]);
+        uI();};}
+    else ol.parentElement.hidden=true;},
+  uI=()=>{localStorage.setItem('I',JSON.stringify(I)); i=I.length; f.reset();
+    for (const e of f.elements) if (e!=b) e.previousElementSibling.className='';
+    b.classList.remove('bs'); b.textContent=' Add'; render();},
+  m=(m,b=0)=>{d.className='d d'+b; d.textContent=m; clearTimeout(to); d.show();
+    to=setTimeout(()=>d.close(),4000);};
+let to, i=I.length, n=ni.value=localStorage.getItem('n')||1;
+
+render();
+
+f.onsubmit=e=>{e.preventDefault();
+  const c=f.c.value.trim(), P=f.P.value.replaceAll(' ',''), s=f.s.value.trim();
+  // if (!c) {m('Course required'); f.c.focus(); return;}
+  if (!/^[1-7][1-8](?:,[1-7][1-8])*$/.test(P)) {m(`Enter cells as two-digit
+    numbers, comma-separated`); f.P.focus(); return;}
+  for (const e of I) if (c.toLowerCase()==e.c.toLowerCase()&&
+    s.toLowerCase()==e.s.toLowerCase()&&i!=I.indexOf(e)) {
+    m('Course section already added'); f.s.focus(); return;}
+  m(i==I.length?'Added':'Saved',1);
+  I.splice(i,1,{c,P:[...new Set(P.split(','))].sort(),u:Number(f.u.value)||3,s});
+  uI();};
+
+setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
+  if (i.value) i.previousElementSibling.className='lu';
+  i.oninput=()=>{i.previousElementSibling.className='lu'; //firefox
+    /* if (i==_) {f(); _.oninput=f;} else */ i.oninput=null;};
+  i.onfocus=()=>i.previousElementSibling.className='lu';
+  i.onblur=()=>{if (!i.value&&!i.matches(':focus'))
+    i.previousElementSibling.className='';};}},225/*chrome*/);
+
+t.onclick=({target})=>{
+  if (target.classList.contains('be')) {i=target.dataset.i;
+    for (const e of f.elements) if (e!=b) {e.value=I[i][e.name];
+      e.previousElementSibling.className='lu';}
+    f.c.focus(); b.classList.add('bs'); b.textContent=' Save';}
+  else if (target.classList.contains('bd')) {I.splice(target.dataset.i,1); uI();}};
+
+ni.onchange=()=>{localStorage.setItem('n',n=ni.value); render();};
+  </script>
+</body>
+</html>
