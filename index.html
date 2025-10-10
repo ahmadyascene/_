@@ -12,7 +12,6 @@
   <link rel="manifest" href="site.webmanifest">
   <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <style>
-@font-face {font-family: n; src: url(n.otf);}
 @font-face {font-family: s; src: url(fa-solid-900.woff2);}
 @font-face {font-family: b; src: url(fa-brands-400.woff2);}
 
@@ -43,12 +42,8 @@ h1::before {content: ''; background: #f0ece3; height: 25%;
 h1:has(>:focus-visible,>:hover)::before {height: 50%;}
 h1>a {color: #596e79; text-decoration: none; display: block;}
 
-header>p {font-size: 1.25em; line-height: 1.5;}
-[dir=rtl] {color: #828a91; font-family: n;}
-[dir=rtl]>:is(strong,b) {color: #212529;}
-[dir=rtl]>span {color: #495057;}
-h1+p+p {font-style: italic; font-weight: 200;}
-h1+p+p>span {font-weight: 300;}
+h1+p {font-weight: 200; font-size: 1.25em; line-height: 1.5;}
+h1+p>span {font-weight: 300;}
 code {background: #f8f9fa; font-family: inherit; padding-inline: .1875em;
   border-radius: .25em;}
 
@@ -73,7 +68,6 @@ label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 .d1::before {content: '\f058'; color: #596e79; font-family: s; scale: 1.7361;
   transform-origin: 0;}
 
-button:not(:has(.l)):disabled {opacity: .65;}
 .b {color: #f0ece3; background: #596e79; border-color: #0000;
   transition: background .15s;}
 .b:focus-visible {outline: .1875em solid;}
@@ -133,19 +127,16 @@ footer [href*=linkedin]::before {content: '\f08c';}
 footer [href*=wa]::before {content: '\f232';}
 footer>small {color: #000; padding-inline: .6em;}
 
-:has(>.l) {background: #fff8; backdrop-filter: blur(1px); position: fixed;
-  inset: 0; z-index: 2;}
-.l {width: 20em; position: absolute; top: 50%; left: 50%; translate: -50% -50%;}
+.l {background: #fff8; position: fixed; inset: 0; z-index: 2;}
+.l>img {width: 20em; position: absolute; top: 50%; left: 50%;
+  translate: -50% -50%;}
   </style>
 </head>
 <body>
   <header>
     <h1><a href="#">CollSched</a></h1>
-    <p dir="rtl">بترتب للترم الجاي؟ دخل مجاميع موادك و<strong>رتبها بالأولوية</strong>. هتلاقي الجداول <b>الأقل أيام</b> (لو محتاج كل مادة)، أو الجداول <b>الأكتر وحدات\مواد</b>.<br>
-  عدل المثال: <span>MATH 101-02 (3) — 34,35,64,65</span>. (<code>34 = صف 3، عمود 4</code>)
-    </p>
     <p>
-      Planning next semester? Add your course sections and <strong>rank them by priority</strong>. You'll see schedules with the <b>fewest days</b> (if you need every course), or schedules with the <b>most credits/courses</b>.<br>
+      Planning next semester? Add your course sections/groups and <strong>rank them by priority</strong>. You'll see schedules with the <b>fewest days</b> (if you need every course), or schedules with the <b>most credits/courses</b>.<br>
       Edit the example: <span>MATH 101-02 (3) — 34,35,64,65</span>. (<code>34 = row 3, col 4</code>)
     </p>
   </header>
@@ -195,62 +186,168 @@ footer>small {color: #000; padding-inline: .6em;}
     </ul>
     <small>&copy; 2025 Ahmad Yascene</small>
   </footer>
-  <div><img src="loading.gif" alt="Loading..." class="l"></div>
+  <div class="l"><img src="loading.gif" alt="Loading..."></div>
   <script>
 'use strict';
 const f=document.forms[0], d=f.querySelector('dialog'),
   b=f.querySelector('button'), t=document.querySelector('tbody'),
   ni=document.querySelector('p>.i'), T=document.querySelector('template').content,
-  ol=document.querySelector('template+ol'),
-  l=document.querySelector('.l').parentElement,
+  ol=document.querySelector('template+ol'), l=document.querySelector('.l'),
   I=JSON.parse(localStorage.getItem('I'))||[
+    // {c:'A',P:['11','12','41','42'],u:3,s:'1'},
+    // {c:'A',P:['13','14','43','44'],u:3,s:'2'},
+    // {c:'A',P:['15','16','45','46'],u:3,s:'3'},
+    // {c:'A',P:['17','18','47','48'],u:3,s:'4'},
+    // {c:'A',P:['21','22','51','52'],u:3,s:'5'},
+    // {c:'A',P:['23','24','53','54'],u:3,s:'6'},
+    // {c:'A',P:['25','26','55','56'],u:3,s:'7'},
+    // {c:'A',P:['27','28','57','58'],u:3,s:'8'},
+    // {c:'A',P:['31','32','61','62'],u:3,s:'9'},
+    // {c:'A',P:['33','34','63','64'],u:3,s:'10'},
+    // {c:'A',P:['35','36','65','66'],u:3,s:'11'},
+    // {c:'A',P:['37','38','67','68'],u:3,s:'12'},
+    // {c:'A',P:['71','72','73','74'],u:3,s:'13'},
+    // {c:'A',P:['75','76','77','78'],u:3,s:'14'},
+    // {c:'B',P:['11','12','41','42'],u:3,s:'1'},
+    // {c:'B',P:['13','14','43','44'],u:3,s:'2'},
+    // {c:'B',P:['15','16','45','46'],u:3,s:'3'},
+    // {c:'B',P:['17','18','47','48'],u:3,s:'4'},
+    // {c:'B',P:['21','22','51','52'],u:3,s:'5'},
+    // {c:'B',P:['23','24','53','54'],u:3,s:'6'},
+    // {c:'B',P:['25','26','55','56'],u:3,s:'7'},
+    // {c:'B',P:['27','28','57','58'],u:3,s:'8'},
+    // {c:'B',P:['31','32','61','62'],u:3,s:'9'},
+    // {c:'B',P:['33','34','63','64'],u:3,s:'10'},
+    // {c:'B',P:['35','36','65','66'],u:3,s:'11'},
+    // {c:'B',P:['37','38','67','68'],u:3,s:'12'},
+    // {c:'B',P:['71','72','73','74'],u:3,s:'13'},
+    // {c:'B',P:['75','76','77','78'],u:3,s:'14'},
+    // {c:'C',P:['11','12','41','42'],u:3,s:'1'},
+    // {c:'C',P:['13','14','43','44'],u:3,s:'2'},
+    // {c:'C',P:['15','16','45','46'],u:3,s:'3'},
+    // {c:'C',P:['17','18','47','48'],u:3,s:'4'},
+    // {c:'C',P:['21','22','51','52'],u:3,s:'5'},
+    // {c:'C',P:['23','24','53','54'],u:3,s:'6'},
+    // {c:'C',P:['25','26','55','56'],u:3,s:'7'},
+    // {c:'C',P:['27','28','57','58'],u:3,s:'8'},
+    // {c:'C',P:['31','32','61','62'],u:3,s:'9'},
+    // {c:'C',P:['33','34','63','64'],u:3,s:'10'},
+    // {c:'C',P:['35','36','65','66'],u:3,s:'11'},
+    // {c:'C',P:['37','38','67','68'],u:3,s:'12'},
+    // {c:'C',P:['71','72','73','74'],u:3,s:'13'},
+    // {c:'C',P:['75','76','77','78'],u:3,s:'14'},
+    // {c:'D',P:['11','12','41','42'],u:3,s:'1'},
+    // {c:'D',P:['13','14','43','44'],u:3,s:'2'},
+    // {c:'E',P:['15','16','45','46'],u:3,s:'3'},
+    // {c:'E',P:['17','18','47','48'],u:3,s:'4'},
+    // {c:'F',P:['21','22','51','52'],u:3,s:'5'},
+    // {c:'F',P:['23','24','53','54'],u:3,s:'6'},
+    // {c:'G',P:['25','26','55','56'],u:3,s:'7'},
+    // {c:'G',P:['27','28','57','58'],u:3,s:'8'},
+    // {c:'H',P:['31','32','61','62'],u:3,s:'9'},
+    // {c:'H',P:['33','34','63','64'],u:3,s:'10'},
+    // {c:'I',P:['35','36','65','66'],u:3,s:'11'},
+    // {c:'I',P:['37','38','67','68'],u:3,s:'12'},
+    // {c:'J',P:['71','72','73','74'],u:3,s:'13'},
+    // {c:'J',P:['75','76','77','78'],u:3,s:'14'},
+    // {c:'K',P:['11','12','41','42'],u:3,s:'1'},
+    // {c:'L',P:['13','14','43','44'],u:3,s:'2'},
+    // {c:'M',P:['15','16','45','46'],u:3,s:'3'},
+    // {c:'N',P:['17','18','47','48'],u:3,s:'4'},
+    // {c:'O',P:['21','22','51','52'],u:3,s:'5'},
+    // {c:'P',P:['23','24','53','54'],u:3,s:'6'},
+    // {c:'Q',P:['25','26','55','56'],u:3,s:'7'},
+    // {c:'R',P:['27','28','57','58'],u:3,s:'8'},
+    // {c:'S',P:['31','32','61','62'],u:3,s:'9'},
+    // {c:'T',P:['33','34','63','64'],u:3,s:'10'},
+    // {c:'K',P:['11','12','41','42'],u:3,s:'01'},
+    // {c:'L',P:['13','14','43','44'],u:3,s:'02'},
+    // {c:'M',P:['15','16','45','46'],u:3,s:'03'},
+    // {c:'N',P:['17','18','47','48'],u:3,s:'04'},
+    // {c:'O',P:['21','22','51','52'],u:3,s:'05'},
+    // {c:'P',P:['23','24','53','54'],u:3,s:'06'},
+    // {c:'Q',P:['25','26','55','56'],u:3,s:'07'},
+    // {c:'R',P:['27','28','57','58'],u:3,s:'08'},
+    // {c:'S',P:['31','32','61','62'],u:3,s:'09'},
+    // {c:'T',P:['33','34','63','64'],u:3,s:'010'},
+    // {c:'U',P:['35','36','65','66'],u:3,s:'11'},
+    // {c:'V',P:['37','38','67','68'],u:3,s:'12'},
+    // {c:'W',P:['71','72','73','74'],u:3,s:'13'},
+    // {c:'X',P:['75','76','77','78'],u:3,s:'14'},
+    // {c:'Y',P:['31','32','33','34','35','36','37'],u:3,s:'13'},
+    // {c:'Z',P:['18','28','38','48','58','68','78'],u:3,s:'14'},
+    // {c:'a',P:['11','21','31','41','51','61','71'],u:3,s:'15'},
+    // {c:'b',P:['12','22','32','42','52','62','72'],u:3,s:'16'},
+    // {c:'c',P:['13','23','33','43','53','63','73'],u:3,s:'17'},
+    // {c:'d',P:['14','24','34','44','54','64','74'],u:3,s:'18'},
+    // {c:'e',P:['15','25','35','45','55','65','75'],u:3,s:'19'},
+    // {c:'f',P:['16','26','36','46','56','66','76'],u:3,s:'20'},
+    // {c:'g',P:['17','27','37','47','57','67','77'],u:3,s:'21'},
+    // {c:'h',P:['11','21','31','41','51','61','71'],u:3,s:'15'},
+    // {c:'i',P:['12','22','32','42','52','62','72'],u:3,s:'16'},
+    // {c:'j',P:['13','23','33','43','53','63','73'],u:3,s:'17'},
+    // {c:'k',P:['14','24','34','44','54','64','74'],u:3,s:'18'},
+    // {c:'l',P:['15','25','35','45','55','65','75'],u:3,s:'19'},
+    // {c:'m',P:['16','26','36','46','56','66','76'],u:3,s:'20'},
+    // {c:'n',P:['17','27','37','47','57','67','77'],u:3,s:'21'},
     {c:'MATH 101',P:['34','35','64','65'],u:3,s:'02'},
-    // {c:'MTE 211',P:['15','16','45','46'],u:2,s:'61'},
-    // {c:'MTE 211',P:['17','18','47','48'],u:2,s:'62'},
-    // {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'61'},
-    // {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'62'},
-    // {c:'MTE 226',P:['24','25','26','54','55','56'],u:3,s:'63'},
-    // {c:'MTE 156',P:['11','12','13','41','42'],u:3,s:'61'},
-    // {c:'MTE 156',P:['21','22','23','51','52'],u:3,s:'62'},
-    // {c:'MTE 156',P:['24','25','53','54','55'],u:3,s:'63'},
-    // {c:'ENG 172',P:['11','12','41','42'],u:2,s:'61'},
-    // {c:'ENG 172',P:['13','14','43','44'],u:2,s:'62'},
-    // {c:'ENG 172',P:['15','16','45','46'],u:2,s:'63'},
-    // {c:'MTE 250',P:['31','32','33','34','35','36','37'],u:3,s:'1'},
-    // {c:'MTE 250',P:['18','28','36','37','38','48','58'],u:3,s:'2'},
-    // {c:'MTE 213',P:['13','14','43','44'],u:2,s:'61'},
-    // {c:'MTE 213',P:['23','24','53','54'],u:2,s:'62'},
-    // {c:'MTE 213',P:['25','26','55','56'],u:2,s:'63'},
-    // {c:'MTE 244',P:['14','15','16'],u:1,s:'61'},
-    // {c:'MTE 244',P:['21','22','23'],u:1,s:'62'},
-    // {c:'MTE 244',P:['24','25','26'],u:1,s:'63'},
-    // {c:'MTE 244',P:['51','52','53'],u:1,s:'64'},
-    // {c:'MTE 244',P:['54','55','56'],u:1,s:'65'},
-    // {c:'ENG 173',P:['13','14','43','44'],u:2,s:'61'},
-    // {c:'ENG 173',P:['21','22','51','52'],u:2,s:'62'},
-    // {c:'MTE 251',P:['17','18','47','48'],u:2,s:''},
-    // {c:'MTE 241',P:['14','15','16'],u:2,s:''},
-    // {c:'MNG 201',P:['11','12','13'],u:2,s:'21'},
-    // {c:'MNG 201',P:['15','16','17'],u:2,s:'22'},
-    // {c:'MNG 201',P:['21','22','23'],u:2,s:'23'},
-    // {c:'MNG 201',P:['25','26','27'],u:2,s:'24'},
-    // {c:'MNG 201',P:['31','32','33'],u:2,s:'25'},
-    // {c:'MNG 201',P:['35','36','37'],u:2,s:'26'},
-    // {c:'MNG 201',P:['41','42','43'],u:2,s:'27'},
-    // {c:'MNG 201',P:['45','46','47'],u:2,s:'28'},
-    // {c:'MNG 201',P:['51','52','53'],u:2,s:'29'},
-    // {c:'MNG 201',P:['55','56','57'],u:2,s:'30'},
-    // {c:'MEC 256',P:['11','12','41','42'],u:3,s:'21'},
-    // {c:'MEC 256',P:['13','14','43','44'],u:3,s:'22'},
-    // {c:'MEC 256',P:['17','18','47','48'],u:3,s:'23'},
-    // {c:'ENG 277',P:['31','32','33','34'],u:3,s:'61'},
-    // {c:'ENG 277',P:['35','36','37','38'],u:3,s:'62'}
+    {c:'MATH 101',P:['44','45','74','75'],u:3,s:'01'},
+    {c:'MATH 101',P:['14','15','44','45'],u:3,s:'03'},
+    {c:'MATH 101',P:['24','25','54','55'],u:3,s:'04'},
+    {c:'Physics',P:['31','32','61','62'],u:3,s:'1'},
+    {c:'Physics',P:['33','34','63','64'],u:3,s:'2'},
+    {c:'Physics',P:['35','36','65','66'],u:3,s:'3'},
+    {c:'Physics',P:['37','38','67','68'],u:3,s:'4'},
+    {c:'Biology',P:['32','33','62','63'],u:3,s:'02'},
+    {c:'Biology',P:['42','43','72','73'],u:3,s:'01'},
+    {c:'Biology',P:['12','13','42','43'],u:3,s:'03'},
+    {c:'Biology',P:['22','23','52','53'],u:3,s:'04'},
+    {c:'MTE 211',P:['15','16','45','46'],u:2,s:'61'},
+    {c:'MTE 211',P:['17','18','47','48'],u:2,s:'62'},
+    {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'61'},
+    {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'62'},
+    {c:'MTE 226',P:['24','25','26','54','55','56'],u:3,s:'63'},
+    {c:'MTE 156',P:['11','12','13','41','42'],u:3,s:'61'},
+    {c:'MTE 156',P:['21','22','23','51','52'],u:3,s:'62'},
+    {c:'MTE 156',P:['24','25','53','54','55'],u:3,s:'63'},
+    {c:'ENG 172',P:['11','12','41','42'],u:2,s:'61'},
+    {c:'ENG 172',P:['13','14','43','44'],u:2,s:'62'},
+    {c:'ENG 172',P:['15','16','45','46'],u:2,s:'63'},
+    {c:'MTE 250',P:['31','32','33','34','35','36','37'],u:3,s:'1'},
+    {c:'MTE 250',P:['18','28','36','37','38','48','58'],u:3,s:'2'},
+    {c:'MTE 213',P:['13','14','43','44'],u:2,s:'61'},
+    {c:'MTE 213',P:['23','24','53','54'],u:2,s:'62'},
+    {c:'MTE 213',P:['25','26','55','56'],u:2,s:'63'},
+    {c:'MTE 244',P:['14','15','16'],u:1,s:'61'},
+    {c:'MTE 244',P:['21','22','23'],u:1,s:'62'},
+    {c:'MTE 244',P:['24','25','26'],u:1,s:'63'},
+    {c:'MTE 244',P:['51','52','53'],u:1,s:'64'},
+    {c:'MTE 244',P:['54','55','56'],u:1,s:'65'},
+    {c:'ENG 173',P:['13','14','43','44'],u:2,s:'61'},
+    {c:'ENG 173',P:['21','22','51','52'],u:2,s:'62'},
+    {c:'MTE 251',P:['17','18','47','48'],u:2,s:''},
+    {c:'MTE 241',P:['14','15','16'],u:2,s:''},
+    {c:'MNG 201',P:['11','12','13'],u:2,s:'21'},
+    {c:'MNG 201',P:['15','16','17'],u:2,s:'22'},
+    {c:'MNG 201',P:['21','22','23'],u:2,s:'23'},
+    {c:'MNG 201',P:['25','26','27'],u:2,s:'24'},
+    {c:'MNG 201',P:['31','32','33'],u:2,s:'25'},
+    {c:'MNG 201',P:['35','36','37'],u:2,s:'26'},
+    {c:'MNG 201',P:['41','42','43'],u:2,s:'27'},
+    {c:'MNG 201',P:['45','46','47'],u:2,s:'28'},
+    {c:'MNG 201',P:['51','52','53'],u:2,s:'29'},
+    {c:'MNG 201',P:['55','56','57'],u:2,s:'30'},
+    {c:'MEC 256',P:['11','12','41','42'],u:3,s:'21'},
+    {c:'MEC 256',P:['13','14','43','44'],u:3,s:'22'},
+    {c:'MEC 256',P:['17','18','47','48'],u:3,s:'23'},
+    {c:'ENG 277',P:['31','32','33','34'],u:3,s:'61'},
+    {c:'ENG 277',P:['35','36','37','38'],u:3,s:'62'}
   ],
   cd=r=>{const D=[];
     for (const {P} of r.slice(1)) for (const [d] of P)
       if (!D.includes(d)) D.push(d);
     return D.length;},
-  render=()=>{if (!I.length) {
+  render=d=>{if (!I.length) {
       ol.parentElement.hidden=t.parentElement.parentElement=true; return;}
     let rows=''; t.parentElement.parentElement.hidden=false;
     for (const [i,{d,c,P,u,s}] of I.entries()) rows+=`<tr>
@@ -267,15 +364,25 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     for (const d of t.querySelectorAll('[type=checkbox]')) d.onchange=()=>{
       I[d.dataset.i].d=!d.checked; uI();};
 
-    const eI=I.filter(({d})=>!d), L=[[]], C=[], R=[], O=[]; let tL;
+    if (d) return;
+    const eI=I.filter(({d})=>!d), C=[], S=[], L=[[]], R=[], O=[];
+    if (eI.length>40) {const C=[]; let c=1;
+      If:for (const {c:i} of eI) {
+        for (const c of C) if (i==c.c) {c.n++; continue If;} C.push({c:i,n:1});}
+      for (const {n} of C) c*=n;
+      if (c>3e6) {c=c.toString();
+        for (let i=c.length-3; i>0; i-=3) c=c.slice(0,i)+' '+c.slice(i);
+        m(`Too many schedules (${c}) — deselect some sections`);
+        l.hidden=ol.parentElement.hidden=true; return;}}
     if (!eI.length) {ol.parentElement.hidden=true; return;}
-    l.hidden=ol.parentElement.hidden=false; ni.value=n;
+    ol.parentElement.hidden=false; ni.value=n; l.hidden=eI.length/n**.05<30;
     setTimeout(()=>{
       for (const c of eI) {
-        if (C.includes(c.c)) {if (!tL||c.c!=C.at(-1)) tL=L.slice();
-          for (const l of tL) for (let i=l.length-1; i>-1; i--) if (c.c==l[i].c) {
+        if (C.includes(c.c)) {for (const l of L
+      .filter(l=>{for (const {c:e,s} of l) if (c.c==e) return S[C.indexOf(c.c)]==s;}))
+          for (let i=l.length-1; i>-1; i--) if (c.c==l[i].c) {
             const nl=l.toSpliced(i,1); nl.push(c); L.push(nl); break;};}
-        else {C.push(c.c); tL=0; for (const l of L) l.push(c);}}
+        else {C.push(c.c); S.push(c.s); for (const l of L) l.push(c);}}
       ni.parentElement.previousElementSibling.textContent=C.join(', ');
       Lf:for (const l of L) {const r=[]; let U=0;
         lf:for (const c of l) {
@@ -283,19 +390,22 @@ const f=document.forms[0], d=f.querySelector('dialog'),
             if (C.slice(0,n).includes(c.c)) continue Lf; else continue lf;
           r.push(c);}
         for (const {u} of r) U+=u; r.unshift(U); R.push(r);}
-      if (n<C.length) {R.sort((a,b)=>(b.length-1)*b[0]-(a.length-1)*a[0]);
-        Rf:for (const r of R) {
-          Uf:for (const o of O) {
-            rf:for (const rc of r.slice(1)) {
-              for (const oc of o.slice(r.indexOf(rc)))
-                if (rc.c==oc.c&&rc.s==oc.s) continue rf;
-              continue Uf;}
-            continue Rf;}
-          O.push(r);}}
-      else R.sort((a,b)=>cd(a)-cd(b));
+      if (R.length)
+        if (n<C.length) {R.sort((a,b)=>(b.length-1)*b[0]-(a.length-1)*a[0]);
+          const w=(R[0].length-1)*R[0][0];
+          Rf:for (const r of R) {if ((r.length-1)*r[0]!=w) break;
+            Of:for (const o of O) {
+              rf:for (const rc of r.slice(1)) {
+                for (const oc of o.slice(r.indexOf(rc)))
+                  if (rc.c==oc.c&&rc.s==oc.s) continue rf;
+                continue Of;}
+              continue Rf;}
+            O.push(r); if (O.length>499) break;}}
+        else {R.sort((a,b)=>cd(a)-cd(b)); const w=cd(R[0]);
+          for (const r of R) {if (cd(r)!=w) break; O.push(r);}}
 
       ol.textContent='';
-      for (const o of O.length?O:R) {
+      for (const o of O) {
         const t=T.cloneNode(true),
           rows=t.firstElementChild.firstElementChild.firstElementChild.children;
         rows[0].children[0].textContent=o[0]+'/'+(o.length-1);
@@ -307,9 +417,9 @@ const f=document.forms[0], d=f.querySelector('dialog'),
           lp=p;}}
         ol.appendChild(t);}
       l.hidden=true;});},
-  uI=()=>{localStorage.setItem('I',JSON.stringify(I)); i=I.length; f.reset();
+  uI=d=>{localStorage.setItem('I',JSON.stringify(I)); i=I.length; f.reset();
     for (const e of f.elements) if (e!=b) e.previousElementSibling.className='';
-    b.classList.remove('bs'); b.textContent=' Add'; render();},
+    b.classList.remove('bs'); b.textContent=' Add'; render(d);},
   m=(m,b=0)=>{d.className='d d'+b; d.textContent=m; clearTimeout(to); d.show();
     to=setTimeout(()=>d.close(),4000);};
 let to, i=I.length, n=ni.value=localStorage.getItem('n')||1;
@@ -318,7 +428,6 @@ render();
 
 f.onsubmit=e=>{e.preventDefault();
   const c=f.c.value.trim(), P=f.P.value.replaceAll(' ',''), s=f.s.value.trim();
-  // if (!c) {m('Course required'); f.c.focus(); return;}
   if (!/^[1-7][1-8](?:,[1-7][1-8])*$/.test(P)) {m(`Enter cells as two-digit
     numbers, comma-separated`); f.P.focus(); return;}
   for (const e of I) if (c.toLowerCase()==e.c.toLowerCase()&&
@@ -341,7 +450,8 @@ t.onclick=({target})=>{
     for (const e of f.elements) if (e!=b) {e.value=I[i][e.name];
       e.previousElementSibling.className='lu';}
     f.c.focus(); b.classList.add('bs'); b.textContent=' Save';}
-  else if (target.classList.contains('bd')) {I.splice(target.dataset.i,1); uI();}};
+  else if (target.classList.contains('bd')) {I.splice(target.dataset.i,1);
+    uI(1);}};
 
 ni.onchange=()=>{localStorage.setItem('n',n=Math.ceil(Math.abs(ni.value))||1); render();};
   </script>
