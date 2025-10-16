@@ -440,8 +440,8 @@ f.onsubmit=e=>{e.preventDefault();
     s.toLowerCase()==e.s.toLowerCase()&&i!=I.indexOf(e)) {
     m('Already added'); f.s.focus(); return;}
   m(i==I.length?'Added':'Saved',1);
-  I.splice(i,1,{c,P:[...new Set(P.split(','))].sort((a,b)=>a-b),
-    u:Number(f.u.value)||3,s});
+  I.splice(i,1,{c,P:[...new Set(P.split(','))].sort((a,b)=>
+    a[0]*10+Number(a.slice(1))-b[0]*10-b.slice(1)),u:Number(f.u.value)||3,s});
   uI();};
 
 setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
