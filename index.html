@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
-  <title>CollSched</title>
-  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-title" content="CollSched">
-  <link rel="manifest" href="site.webmanifest">
+  <title>SemSched</title>
+  <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+  <link rel="shortcut icon" href="favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="SemSched">
+  <link rel="manifest" href="favicon/site.webmanifest">
   <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <style>
 @font-face {font-family: s; src: url(fa-solid-900.woff2);}
@@ -27,6 +27,7 @@ body {color: #212529; font-weight: 300;
 @media (width>=62em) {body {width: 58.5em;}}
 
 a {-webkit-tap-highlight-color: #0000; outline: 0;}
+a:not(:focus-visible,:hover) {text-decoration: none;}
 .ib {font-size: inherit; line-height: 1.5; font-family: inherit;
   padding: .625em .75em; border: .0625em solid; border-radius: .5em;}
 .i {color: inherit; font-weight: inherit; width: 100%; border-color: #bec3c9;
@@ -34,17 +35,11 @@ a {-webkit-tap-highlight-color: #0000; outline: 0;}
 .i:focus {border-color: #596e79; outline: 0;}
 button {-webkit-tap-highlight-color: #0000;}
 
-h1 {font-size: 2.25em; width: fit-content; margin-inline: auto;
-  position: relative;}
-h1::before {content: ''; background: #f0ece3; height: 25%;
-  border-radius: 0 0 .15em .15em; position: absolute; inset-inline: 0;
-  bottom: 16.666667%; z-index: -1; transition: height .15s;}
-h1:has(>:focus-visible,>:hover)::before {height: 50%;}
-h1>a {color: #596e79; text-decoration: none; display: block;}
+h1 {text-align: center;}
+h1>a {color: #596e79;}
 
-h1+p {font-weight: 200; font-size: 1.25em; line-height: 1.5;}
-h1+p>span {font-weight: 300;}
-code {background: #f0ece3; font-family: inherit; padding-inline: .1875em;
+h1+p>b {font-style: italic; font-weight: inherit;}
+code {background: #f8f9fa; font-family: inherit; padding-inline: .1875em;
   border-radius: .25em;}
 
 form {margin-bottom: 1em; display: grid; gap: .625em;}
@@ -68,7 +63,7 @@ label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 .d1::before {content: '\f058'; color: #596e79; font-family: s; scale: 1.7361;
   transform-origin: 0;}
 
-.b {color: #f0ece3; background: #596e79; border-color: #0000;
+.b {color: #fff; background: #596e79; border-color: #0000;
   transition: background .15s;}
 .b:focus-visible {outline: .1875em solid;}
 .b:enabled:hover {background: #647b87;}
@@ -86,9 +81,9 @@ th {font-weight: 500;}
 tbody>:nth-child(n+2)>* {border-top: .0625em solid #bec3c9;}
 td {text-align: center; white-space: nowrap;}
 
-:is(table,p) .i {appearance: textfield; text-align: center; width: 3em;
+:is(table,p+label) .i {appearance: textfield; text-align: center; width: 3em;
   aspect-ratio: 1.618034; padding: 0;}
-:is(table,p) .i::-webkit-inner-spin-button {display: none;}
+:is(table,p+label) .i::-webkit-inner-spin-button {display: none;}
 
 .be, .bd {background: 0; padding: .375em .75em; border-color: #0000;
   transition: color .15s, background .15s;}
@@ -107,10 +102,10 @@ td {text-align: center; white-space: nowrap;}
   vertical-align: middle; accent-color: #596e79;}
 
 h2 {font-size: 1.25em; margin-block: 0; display: inline-block;}
-h2+p {margin-block: 0; display: inline-block;}
-p:has(>.i) {margin-top: .5em;}
+h2+p {margin-block: 0 1em; display: inline-block;}
+p+label {display: block;}
 
-template+ol {padding-left: 0; list-style: none;}
+template+p+ol {padding-left: 0; list-style: none;}
 ol tr>:nth-child(n+2) {border-left: .0625em solid #bec3c9;}
 
 footer {margin-block: .25em; display: flex; flex-flow: wrap;
@@ -119,7 +114,6 @@ footer {margin-block: .25em; display: flex; flex-flow: wrap;
 footer>ul {list-style: none; padding-left: 0; margin-block: 0; display: flex;}
 footer a {color: inherit; line-height: 2em; font-family: b; text-align: center;
   width: 2em; display: block;}
-footer a:not(:focus-visible,:hover) {text-decoration: none;}
 footer ::before {vertical-align: bottom;}
 footer [href$=com]::before {content: 'AY'; font-size: .75em;}
 footer [href*=github]::before {content: '\f09b';}
@@ -127,14 +121,15 @@ footer [href*=linkedin]::before {content: '\f08c';}
 footer [href*=wa]::before {content: '\f232';}
 footer>small {color: #000; padding-inline: .6em;}
 
-.l {background: #fff8; position: fixed; inset: 0; z-index: 2;}
+.l {background: #fff8; width: 100vw; height: 100vh; position: fixed; top: 0;
+  left: 0; z-index: 2;}
 .l>img {width: 20em; position: absolute; top: 50%; left: 50%;
   translate: -50% -50%;}
   </style>
 </head>
 <body>
   <header>
-    <h1><a href="#">CollSched</a></h1>
+    <h1><a href="#">SemSched</a></h1>
     <p>
       Planning next semester? Add your course sections/groups and <strong>rank them by priority</strong>. You'll see schedules with the <b>fewest days</b> (if you need every course), or schedules with the <b>most credits/courses</b>.<br>
       Edit the example: <span>MATH 101-02 (3) — 34,35,64,65</span>. (<code>34 = row 3, col 4</code>)
@@ -161,19 +156,20 @@ footer>small {color: #000; padding-inline: .6em;}
     <div>
       <h2>Courses:</h2>
       <p></p>
-      <p>Need first <input type="number" class="ib i"></p>
+      <label>Need first <input type="number" class="ib i"></label>
       <template>
         <li><table><tbody>
-          <tr><td></td><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr>
-          <tr><th>Sat</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Sun</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Mon</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Tue</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Wed</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Thu</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Fri</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td></td><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+          <tr><th>Sat</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Sun</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Mon</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Tue</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Wed</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Thu</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Fri</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
         </tbody></table></li>
       </template>
+      <p></p>
       <ol></ol>
     </div>
   </main>
@@ -191,8 +187,9 @@ footer>small {color: #000; padding-inline: .6em;}
 'use strict';
 const f=document.forms[0], d=f.querySelector('dialog'),
   b=f.querySelector('button'), t=document.querySelector('tbody'),
-  ni=document.querySelector('p>.i'), T=document.querySelector('template').content,
-  ol=document.querySelector('template+ol'), l=document.querySelector('.l'),
+  ni=document.querySelector('p+label>.i'),
+  T=document.querySelector('template').content,
+  ol=document.querySelector('template+p+ol'), l=document.querySelector('.l'),
   I=JSON.parse(localStorage.getItem('I'))||[
     // {c:'A',P:['11','12','41','42'],u:3,s:'1'},
     // {c:'A',P:['13','14','43','44'],u:3,s:'2'},
@@ -298,10 +295,10 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     {c:'Physics',P:['33','34','63','64'],u:3,s:'2'},
     {c:'Physics',P:['35','36','65','66'],u:3,s:'3'},
     {c:'Physics',P:['37','38','67','68'],u:3,s:'4'},
-    {c:'Biology',P:['32','33','62','63'],u:3,s:'02'},
-    {c:'Biology',P:['42','43','72','73'],u:3,s:'01'},
-    {c:'Biology',P:['12','13','42','43'],u:3,s:'03'},
-    {c:'Biology',P:['22','23','52','53'],u:3,s:'04'},
+    // {c:'Biology',P:['32','33','62','63'],u:3,s:'02'},
+    // {c:'Biology',P:['42','43','72','73'],u:3,s:'01'},
+    // {c:'Biology',P:['12','13','42','43'],u:3,s:'03'},
+    // {c:'Biology',P:['22','23','52','53'],u:3,s:'04'},
     {c:'MTE 211',P:['15','16','45','46'],u:2,s:'61'},
     {c:'MTE 211',P:['17','18','47','48'],u:2,s:'62'},
     {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'61'},
@@ -347,8 +344,10 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     for (const {P} of r.slice(1)) for (const [d] of P)
       if (!D.includes(d)) D.push(d);
     return D.length;},
-  render=d=>{if (!I.length) {
-      ol.parentElement.hidden=t.parentElement.parentElement=true; return;}
+  render=d=>{
+    if (!I.length) {
+      l.hidden=ol.parentElement.hidden=t.parentElement.parentElement.hidden=true;
+      return;}
     let rows=''; t.parentElement.parentElement.hidden=false;
     for (const [i,{d,c,P,u,s}] of I.entries()) rows+=`<tr>
       <td><input type=number value=${i+1} ${d?'disabled':''} class="ib i" data-i=${i}></td>
@@ -366,16 +365,20 @@ const f=document.forms[0], d=f.querySelector('dialog'),
 
     if (d) return;
     const eI=I.filter(({d})=>!d), C=[], S=[], L=[[]], R=[], O=[];
+    if (!eI.length) {l.hidden=ol.parentElement.hidden=true; return;}
     if (eI.length>40) {const C=[]; let c=1;
       If:for (const {c:i} of eI) {
         for (const c of C) if (i==c.c) {c.n++; continue If;} C.push({c:i,n:1});}
       for (const {n} of C) c*=n;
-      if (c>3e6) {c=c.toString();
+      if (c>2e6) {const N=[]; for (const {c} of C) N.push(c);
+        ni.parentElement.previousElementSibling.textContent=N.join(', ');
+        c=c.toString();
         for (let i=c.length-3; i>0; i-=3) c=c.slice(0,i)+' '+c.slice(i);
-        m(`Too many schedules (${c}) — deselect some sections`);
-        l.hidden=ol.parentElement.hidden=true; return;}}
-    if (!eI.length) {ol.parentElement.hidden=true; return;}
-    ol.parentElement.hidden=false; ni.value=n; l.hidden=eI.length/n**.05<30;
+        ol.previousElementSibling.hidden=false;
+        ol.previousElementSibling.textContent=`Too many combinations (${c}) — deselect some sections`;
+        ol.textContent=''; l.hidden=true; return;}}
+    ol.parentElement.hidden=false; ol.previousElementSibling.hidden=true;
+    ni.value=n; l.hidden=eI.length/n**.05<30;
     setTimeout(()=>{
       for (const c of eI) {
         if (C.includes(c.c)) {for (const l of L
@@ -403,6 +406,8 @@ const f=document.forms[0], d=f.querySelector('dialog'),
             O.push(r); if (O.length>499) break;}}
         else {R.sort((a,b)=>cd(a)-cd(b)); const w=cd(R[0]);
           for (const r of R) {if (cd(r)!=w) break; O.push(r);}}
+      else {ol.previousElementSibling.hidden=false;
+        ol.previousElementSibling.textContent='No possible schedules — decrease the "Need first" value';};
 
       ol.textContent='';
       for (const o of O) {
@@ -410,10 +415,11 @@ const f=document.forms[0], d=f.querySelector('dialog'),
           rows=t.firstElementChild.firstElementChild.firstElementChild.children;
         rows[0].children[0].textContent=o[0]+'/'+(o.length-1);
         for (const {c,P,u,s} of o.slice(1)) {let fp, lp; for (const p of P) {
-          if (p-lp==1) {rows[p[0]].children[p[1]].hidden=true;
+          if (p-lp==1||p-lp==9*p[0]+'1') {
+            rows[p[0]].children[p.slice(1)].hidden=true;
             rows[fp[0]].children[fp[1]].colSpan++;}
           else {fp=p;
-            rows[p[0]].children[p[1]].textContent=c+(s?'-'+s:'')+' ('+u+')';}
+            rows[p[0]].children[p.slice(1)].textContent=c+(s?'-'+s:'')+' ('+u+')';}
           lp=p;}}
         ol.appendChild(t);}
       l.hidden=true;});},
@@ -428,13 +434,14 @@ render();
 
 f.onsubmit=e=>{e.preventDefault();
   const c=f.c.value.trim(), P=f.P.value.replaceAll(' ',''), s=f.s.value.trim();
-  if (!/^[1-7][1-8](?:,[1-7][1-8])*$/.test(P)) {m(`Enter cells as two-digit
-    numbers, comma-separated`); f.P.focus(); return;}
+  if (!/^[1-7](?:[1-9]|10)(?:,[1-7](?:[1-9]|10))*$/.test(P)) {m(`Enter cells as
+    numbers, comma-separated (see example above)`); f.P.focus(); return;}
   for (const e of I) if (c.toLowerCase()==e.c.toLowerCase()&&
     s.toLowerCase()==e.s.toLowerCase()&&i!=I.indexOf(e)) {
     m('Already added'); f.s.focus(); return;}
   m(i==I.length?'Added':'Saved',1);
-  I.splice(i,1,{c,P:[...new Set(P.split(','))].sort(),u:Number(f.u.value)||3,s});
+  I.splice(i,1,{c,P:[...new Set(P.split(','))].sort((a,b)=>a-b),
+    u:Number(f.u.value)||3,s});
   uI();};
 
 setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
@@ -453,7 +460,8 @@ t.onclick=({target})=>{
   else if (target.classList.contains('bd')) {I.splice(target.dataset.i,1);
     uI(1);}};
 
-ni.onchange=()=>{localStorage.setItem('n',n=Math.ceil(Math.abs(ni.value))||1); render();};
+ni.onchange=()=>{localStorage.setItem('n',n=Math.ceil(Math.abs(ni.value))||1);
+  render();};
   </script>
 </body>
 </html>
