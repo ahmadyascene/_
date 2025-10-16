@@ -19,9 +19,10 @@
 html {position: relative;}
 @keyframes fade-in {0% {opacity: 0;}}
 body {color: #212529; font-weight: 300;
-  font-family: 'Alegreya Sans SC', system-ui; min-height: calc(100dvh - 2.5em);
-  padding-bottom: 2.5em; margin: 0 .75em; display: flex; flex-flow: column;
-  justify-content: center; animation: .75s cubic-bezier(.75,0,.75,.9) fade-in;}
+  font-family: 'Alegreya Sans SC', system-ui; line-height: 1.5;
+  min-height: calc(100dvh - 2.5em); padding-bottom: 2.5em; margin: 0 .75em;
+  display: flex; flex-flow: column; justify-content: center;
+  animation: .75s cubic-bezier(.75,0,.75,.9) fade-in;}
 @media (width>=36em) {body {width: 32.25em; margin-inline: auto;}}
 @media (width>=48em) {body {width: 43.5em;}}
 @media (width>=62em) {body {width: 58.5em;}}
@@ -37,7 +38,6 @@ button {-webkit-tap-highlight-color: #0000;}
 
 h1 {text-align: center;}
 h1>a {color: #596e79;}
-
 h1+p>b {font-style: italic; font-weight: inherit;}
 code {background: #f8f9fa; font-family: inherit; padding-inline: .1875em;
   border-radius: .25em;}
