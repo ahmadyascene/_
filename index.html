@@ -19,10 +19,9 @@
 html {position: relative;}
 @keyframes fade-in {0% {opacity: 0;}}
 body {color: #212529; font-weight: 300;
-  font-family: 'Alegreya Sans SC', system-ui;
-  min-height: calc(100dvh - 2.5em); padding-bottom: 2.5em; margin: 0 .75em;
-  display: flex; flex-flow: column; justify-content: center;
-  animation: .75s cubic-bezier(.75,0,.75,.9) fade-in;}
+  font-family: 'Alegreya Sans SC', system-ui; min-height: calc(100dvh - 2.5em);
+  padding-bottom: 2.5em; margin: 0 .75em; display: flex; flex-flow: column;
+  justify-content: center; animation: .75s cubic-bezier(.75,0,.75,.9) fade-in;}
 @media (width>=36em) {body {width: 32.25em; margin-inline: auto;}}
 @media (width>=48em) {body {width: 43.5em;}}
 @media (width>=62em) {body {width: 58.5em;}}
@@ -104,8 +103,8 @@ td {text-align: center; white-space: nowrap;}
   vertical-align: middle; accent-color: #596e79;}
 
 h2 {font-size: 1.25em; margin-block: 0; display: inline-block;}
-h2+p {margin-block: 0 1em; display: inline-block;}
-p+label {display: block;}
+h2+p {margin-top: 0; display: inline-block;}
+p+label {width: fit-content; display: block;}
 
 template+p+ol {padding-left: 0; list-style: none;}
 ol tr>:nth-child(n+2) {border-left: .0625em solid #bec3c9;}
@@ -134,7 +133,7 @@ footer>small {color: #000; padding-inline: .6em;}
     <h1><a href="#">SemSched</a></h1>
     <p>
       Planning next semester? Add your course sections/groups and <strong>rank them by priority</strong>. You'll see schedules with the <b>fewest days</b> (if you need every course), or schedules with the <b>most credits/courses</b>.<br>
-      Edit the example: <span>MATH 101-02 (3) — 34,35,64,65</span>. (<code>34 = row 3, col 4</code>)
+      Edit the example: <span>MATH 101-02 (3) — 25,26,55,56</span>. (<code>25 = row 2, col 5</code>)
     </p>
   </header>
   <main>
@@ -162,13 +161,13 @@ footer>small {color: #000; padding-inline: .6em;}
       <template>
         <li><table><tbody>
           <tr><td></td><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
-          <tr><th>Sat</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Sun</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Mon</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Tue</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Wed</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Thu</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>Fri</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>1</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>2</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>3</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>4</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>5</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>6</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>7</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
         </tbody></table></li>
       </template>
       <p></p>
@@ -289,7 +288,7 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     // {c:'l',P:['15','25','35','45','55','65','75'],u:3,s:'19'},
     // {c:'m',P:['16','26','36','46','56','66','76'],u:3,s:'20'},
     // {c:'n',P:['17','27','37','47','57','67','77'],u:3,s:'21'},
-    {c:'MATH 101',P:['34','35','64','65'],u:3,s:'02'},
+    {c:'MATH 101',P:['25','26','55','56'],u:3,s:'02'},
     // {c:'MATH 101',P:['44','45','74','75'],u:3,s:'01'},
     // {c:'MATH 101',P:['14','15','44','45'],u:3,s:'03'},
     // {c:'MATH 101',P:['24','25','54','55'],u:3,s:'04'},
@@ -359,6 +358,7 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     </tr>`;
     t.innerHTML=rows;
     for (const i of t.querySelectorAll('.i')) i.onchange=()=>{
+      if (i.value==='') {i.value=+i.dataset.i+1; return;}
       const v=parseInt(i.value);
       I.splice(v>0?v-1:v<-1?v+1:v==-1?I.length:0,0,I.splice(i.dataset.i,1)[0]);
       uI();};
@@ -368,41 +368,53 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     if (d) return;
     const eI=I.filter(({d})=>!d), C=[], S=[], L=[[]], R=[], O=[];
     if (!eI.length) {l.hidden=ol.parentElement.hidden=true; return;}
-    if (eI.length>40) {const C=[]; let c=1;
-      If:for (const {c:i} of eI) {
-        for (const c of C) if (i==c.c) {c.n++; continue If;} C.push({c:i,n:1});}
-      for (const {n} of C) c*=n;
-      if (c>2e6) {const N=[]; for (const {c} of C) N.push(c);
-        ni.parentElement.previousElementSibling.textContent=N.join(', ');
-        c=c.toString();
-        for (let i=c.length-3; i>0; i-=3) c=c.slice(0,i)+' '+c.slice(i);
+    if (eI.length>40) {const CN=[]; let N=1;
+      If:for (const {c} of eI) {//(c.toLowerCase()==cn.c.toLowerCase()
+        for (const cn of CN) if (c==cn.c) {cn.n++; continue If;}
+        CN.push({c,n:1});}
+      for (const {n} of CN) N*=n;
+      if (N>2e6) {const C=[]; for (const {c} of CN) C.push(c);
+        ol.parentElement.firstElementChild.textContent=`Courses (${CN.length}):`;
+        ni.parentElement.previousElementSibling.textContent=C.join(', ');
+        N=N.toString();
+        for (let i=N.length-3; i>0; i-=3) N=N.slice(0,i)+' '+N.slice(i);
         ol.previousElementSibling.hidden=false;
-        ol.previousElementSibling.textContent=`Too many combinations (${c}) — deselect some sections`;
+        ol.previousElementSibling.textContent=`Too many combinations (${N}) — deselect some sections`;
         ol.textContent=''; l.hidden=true; return;}}
     ol.parentElement.hidden=false; ol.previousElementSibling.hidden=true;
     ni.value=n; l.hidden=eI.length/n**.05<30;
     setTimeout(()=>{
-      for (const c of eI) {
-        if (C.includes(c.c)) {for (const l of L
-      .filter(l=>{for (const {c:e,s} of l) if (c.c==e) return S[C.indexOf(c.c)]==s;}))
-          for (let i=l.length-1; i>-1; i--) if (c.c==l[i].c) {
-            const nl=l.toSpliced(i,1); nl.push(c); L.push(nl); break;};}
-        else {C.push(c.c); S.push(c.s); for (const l of L) l.push(c);}}
+      for (const cs of eI) {
+        if (C.includes(cs.c)) {for (const l of L
+      .filter(l=>{for (const {c,s} of l) if (cs.c==c) return S[C.indexOf(cs.c)]==s;}))
+          for (let i=l.length-1; i>-1; i--) if (cs.c==l[i].c) {
+            const nl=l.toSpliced(i,1); nl.push(cs); L.push(nl); break;};}
+        else {C.push(cs.c); S.push(cs.s); for (const l of L) l.push(cs);}}
+//       eIf:for (const cs of eI) {
+//         for (const [i,c] of C.entries()) if (cs.c.toLowerCase()==c.toLowerCase()) {
+//           for (const l of L
+// .filter(l=>{for (const {c,s} of l) if (cs.c.toLowerCase()==c.toLowerCase()) return S[i]==s;}))
+//             for (let i=l.length-1; i>-1; i--) if (cs.c.toLowerCase()==l[i].c.toLowerCase()) {
+//               const nl=l.toSpliced(i,1); nl.push(cs); L.push(nl); break;};
+//           continue eIf;}
+//         C.push(cs.c); S.push(cs.s); for (const l of L) l.push(cs);}
+      ol.parentElement.firstElementChild.textContent=`Courses (${C.length}):`;
       ni.parentElement.previousElementSibling.textContent=C.join(', ');
       Lf:for (const l of L) {const r=[]; let U=0;
-        lf:for (const c of l) {
-          for (const p of c.P) for (const {P} of r) if (P.includes(p))
-            if (C.slice(0,n).includes(c.c)) continue Lf; else continue lf;
-          r.push(c);}
+        lf:for (const cs of l) {
+          for (const p of cs.P) for (const {P} of r) if (P.includes(p))
+            if (C.slice(0,n).includes(cs.c)) continue Lf; else continue lf;
+          r.push(cs);}
         for (const {u} of r) U+=u; r.unshift(U); R.push(r);}
       if (R.length)
         if (n<C.length) {R.sort((a,b)=>(b.length-1)*b[0]-(a.length-1)*a[0]);
           const w=(R[0].length-1)*R[0][0];
           Rf:for (const r of R) {if ((r.length-1)*r[0]!=w) break;
             Of:for (const o of O) {
-              rf:for (const rc of r.slice(1)) {
-                for (const oc of o.slice(r.indexOf(rc)))
-                  if (rc.c==oc.c&&rc.s==oc.s) continue rf;
+              rf:for (const rcs of r.slice(1)) {
+                for (const ocs of o.slice(r.indexOf(rcs)))
+                  //(rcs.c.toLowerCase()==ocs.c.toLowerCase()&&rcs.s==ocs.s)
+                  if (rcs.c==ocs.c&&rcs.s==ocs.s) continue rf;
                 continue Of;}
               continue Rf;}
             O.push(r); if (O.length>499) break;}}
@@ -434,18 +446,6 @@ let to, i=I.length, n=ni.value=localStorage.getItem('n')||1;
 
 render();
 
-f.onsubmit=e=>{e.preventDefault();
-  const c=f.c.value.trim(), P=f.P.value.replaceAll(' ',''), s=f.s.value.trim();
-  if (!/^[1-7](?:[1-9]|10)(?:,[1-7](?:[1-9]|10))*$/.test(P)) {m(`Enter cells as
-    numbers, comma-separated (see example above)`); f.P.focus(); return;}
-  for (const e of I) if (c.toLowerCase()==e.c.toLowerCase()&&
-    s.toLowerCase()==e.s.toLowerCase()&&i!=I.indexOf(e)) {
-    m('Already added'); f.s.focus(); return;}
-  m(i==I.length?'Added':'Saved',1);
-  I.splice(i,1,{c,P:[...new Set(P.split(','))].sort((a,b)=>
-    a[0]*10+Number(a.slice(1))-b[0]*10-b.slice(1)),u:Number(f.u.value)||3,s});
-  uI();};
-
 setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
   if (i.value) i.previousElementSibling.className='lu';
   i.oninput=()=>{i.previousElementSibling.className='lu'; //firefox
@@ -453,6 +453,20 @@ setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
   i.onfocus=()=>i.previousElementSibling.className='lu';
   i.onblur=()=>{if (!i.value&&!i.matches(':focus'))
     i.previousElementSibling.className='';};}},225/*chrome*/);
+
+f.onsubmit=e=>{e.preventDefault();
+  const c=f.c.value.trim(), P=f.P.value.replaceAll(' ',''), s=f.s.value.trim();
+//c.toLowerCase()==cs.c.toLowerCase()&&s.toLowerCase()==cs.s.toLowerCase()
+  for (const cs of I) if (c==cs.c&&s==cs.s&&i!=I.indexOf(cs)) {
+    m('Already added'); f.s.focus(); return;}
+  if (!/^[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*$/.test(P)) {m(`Enter cell codes, comma-separated (see example above)`); f.P.focus(); return;}
+  m(i==I.length?'Added':'Saved',1);
+  I.splice(i,1,{c,P:[...new Set(P.split(/,+/))].sort((a,b)=>
+    a[0]*10+Number(a.slice(1))-b[0]*10-b.slice(1)),u:Number(f.u.value)||3,s});
+  uI();};
+
+f.c.onchange=()=>{for (const {c,u} of I) if (f.c.value.trim()==c) {
+  f.u.value=u; f.u.previousElementSibling.className='lu'; return;}};
 
 t.onclick=({target})=>{
   if (target.classList.contains('be')) {i=target.dataset.i;
@@ -462,7 +476,8 @@ t.onclick=({target})=>{
   else if (target.classList.contains('bd')) {I.splice(target.dataset.i,1);
     uI(1);}};
 
-ni.onchange=()=>{localStorage.setItem('n',n=Math.ceil(Math.abs(ni.value))||1);
+ni.onchange=()=>{if (!+ni.value) {ni.value=n; return;}
+  localStorage.setItem('n',n=Math.ceil(Math.abs(ni.value)));
   render();};
   </script>
 </body>
