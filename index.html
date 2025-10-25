@@ -102,7 +102,7 @@ td {text-align: center; white-space: nowrap;}
 [type=checkbox] {width: 1.25em; height: 1.25em; margin: 0 .25em .1875em 0;
   vertical-align: middle; accent-color: #596e79;}
 
-h2 {font-size: 1.25em; margin-block: 0; display: inline-block;}
+h2 {font-weight: 500; font-size: 1.125em; margin-block: 0; display: inline-block;}
 h2+p {margin-top: 0; display: inline-block;}
 p+label {width: fit-content; display: block;}
 
@@ -288,7 +288,7 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     // {c:'l',P:['15','25','35','45','55','65','75'],u:3,s:'19'},
     // {c:'m',P:['16','26','36','46','56','66','76'],u:3,s:'20'},
     // {c:'n',P:['17','27','37','47','57','67','77'],u:3,s:'21'},
-    {c:'MATH 101',P:['25','26','55','56'],u:3,s:'02'},
+    {c:'MATH 101',s:'02',u:3,P:['25','26','55','56']},
     // {c:'MATH 101',P:['44','45','74','75'],u:3,s:'01'},
     // {c:'MATH 101',P:['14','15','44','45'],u:3,s:'03'},
     // {c:'MATH 101',P:['24','25','54','55'],u:3,s:'04'},
@@ -349,27 +349,26 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     if (!I.length) {
       l.hidden=ol.parentElement.hidden=t.parentElement.parentElement.hidden=true;
       return;}
-    let rows=''; t.parentElement.parentElement.hidden=false;
-    for (const [i,{d,c,P,u,s}] of I.entries()) rows+=`<tr>
+    let rows=''; for (const [i,{d,c,s,u,P}] of I.entries()) rows+=`<tr>
       <td><input type=number value=${i+1} ${d?'disabled':''} class="ib i" data-i=${i}></td>
       <td>${c}${s?'-'+s:''} (${u}) — ${P}</td>
       <td><button data-i=${i} class="ib b${d?'d">&nbsp;Delete':'e">&nbsp;Edit'}</button></td>
       <td><label><input type=checkbox ${d?'':'checked'} data-i=${i}>&nbsp;Selected</label></td>
     </tr>`;
-    t.innerHTML=rows;
+    t.parentElement.parentElement.hidden=false; t.innerHTML=rows;
     for (const i of t.querySelectorAll('.i')) i.onchange=()=>{
       if (i.value==='') {i.value=+i.dataset.i+1; return;}
       const v=parseInt(i.value);
       I.splice(v>0?v-1:v<-1?v+1:v==-1?I.length:0,0,I.splice(i.dataset.i,1)[0]);
       uI();};
-    for (const d of t.querySelectorAll('[type=checkbox]')) d.onchange=()=>{
-      I[d.dataset.i].d=!d.checked; uI();};
+    for (const e of t.querySelectorAll('[type=checkbox]')) e.onchange=()=>{
+      I[e.dataset.i].d=!e.checked; uI();};
 
     if (d) return;
     const eI=I.filter(({d})=>!d), C=[], S=[], L=[[]], R=[], O=[];
     if (!eI.length) {l.hidden=ol.parentElement.hidden=true; return;}
     if (eI.length>40) {const CN=[]; let N=1;
-      If:for (const {c} of eI) {//(c.toLowerCase()==cn.c.toLowerCase()
+      If:for (const {c} of eI) {
         for (const cn of CN) if (c==cn.c) {cn.n++; continue If;}
         CN.push({c,n:1});}
       for (const {n} of CN) N*=n;
@@ -384,42 +383,37 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     ol.parentElement.hidden=false; ol.previousElementSibling.hidden=true;
     ni.value=n; l.hidden=eI.length/n**.05<30;
     setTimeout(()=>{
-      for (const cs of eI) {
-        if (C.includes(cs.c)) {for (const l of L
-      .filter(l=>{for (const {c,s} of l) if (cs.c==c) return S[C.indexOf(cs.c)]==s;}))
-          for (let i=l.length-1; i>-1; i--) if (cs.c==l[i].c) {
-            const nl=l.toSpliced(i,1); nl.push(cs); L.push(nl); break;};}
+console.time('L');      for (const cs of eI) {
+        if (C.includes(cs.c)) {for (const l of L)
+          for (let i=0; i<l.length; i++)
+            if (cs.c==l[i].c) {if (S[C.indexOf(cs.c)]==l[i].s)
+              {const nl=l.toSpliced(i,1); nl.push(cs); L.push(nl);} break;};}
         else {C.push(cs.c); S.push(cs.s); for (const l of L) l.push(cs);}}
-//       eIf:for (const cs of eI) {
-//         for (const [i,c] of C.entries()) if (cs.c.toLowerCase()==c.toLowerCase()) {
-//           for (const l of L
-// .filter(l=>{for (const {c,s} of l) if (cs.c.toLowerCase()==c.toLowerCase()) return S[i]==s;}))
-//             for (let i=l.length-1; i>-1; i--) if (cs.c.toLowerCase()==l[i].c.toLowerCase()) {
-//               const nl=l.toSpliced(i,1); nl.push(cs); L.push(nl); break;};
-//           continue eIf;}
-//         C.push(cs.c); S.push(cs.s); for (const l of L) l.push(cs);}
+console.timeEnd('L');
       ol.parentElement.firstElementChild.textContent=`Courses (${C.length}):`;
       ni.parentElement.previousElementSibling.textContent=C.join(', ');
-      Lf:for (const l of L) {const r=[]; let U=0;
+console.time('R');console.log(L.length);
+      Lf:for (const l of L) {const r=[0], P=[];
         lf:for (const cs of l) {
-          for (const p of cs.P) for (const {P} of r) if (P.includes(p))
+          for (const p of cs.P) if (P.includes(p))
             if (C.slice(0,n).includes(cs.c)) continue Lf; else continue lf;
-          r.push(cs);}
-        for (const {u} of r) U+=u; r.unshift(U); R.push(r);}
+          r.push(cs); r[0]+=cs.u; for (const p of cs.P) P.push(p);}
+        R.push(r);}
+console.timeEnd('R');console.log(R.length);
       if (R.length)
         if (n<C.length) {R.sort((a,b)=>(b.length-1)*b[0]-(a.length-1)*a[0]);
           const w=(R[0].length-1)*R[0][0];
           Rf:for (const r of R) {if ((r.length-1)*r[0]!=w) break;
             Of:for (const o of O) {
-              rf:for (const rcs of r.slice(1)) {
-                for (const ocs of o.slice(r.indexOf(rcs)))
-                  //(rcs.c.toLowerCase()==ocs.c.toLowerCase()&&rcs.s==ocs.s)
-                  if (rcs.c==ocs.c&&rcs.s==ocs.s) continue rf;
+              rf:for (let i=1; i<r.length; i++) {
+                for (let j=i; j<o.length; j++)
+                  if (r[i].c==o[i].c&&r[i].s==o[i].s) continue rf;
                 continue Of;}
               continue Rf;}
-            O.push(r); if (O.length>499) break;}}
+            O.push(r); if (O.length>99) break;}}
         else {R.sort((a,b)=>cd(a)-cd(b)); const w=cd(R[0]);
-          for (const r of R) {if (cd(r)!=w) break; O.push(r);}}
+          for (const r of R) {if (cd(r)!=w) break; O.push(r);
+            if (O.length>99) break;}}
       else {ol.previousElementSibling.hidden=false;
         ol.previousElementSibling.textContent='No possible schedules — decrease the "Need first" value';};
 
@@ -428,7 +422,7 @@ const f=document.forms[0], d=f.querySelector('dialog'),
         const t=T.cloneNode(true),
           rows=t.firstElementChild.firstElementChild.firstElementChild.children;
         rows[0].children[0].textContent=o[0]+'/'+(o.length-1);
-        for (const {c,P,u,s} of o.slice(1)) {let fp, lp; for (const p of P) {
+        for (const {c,s,u,P} of o.slice(1)) {let fp, lp; for (const p of P) {
           if (p-lp==1||p-lp==9*p[0]+'1') {
             rows[p[0]].children[p.slice(1)].hidden=true;
             rows[fp[0]].children[fp[1]].colSpan++;}
@@ -456,13 +450,12 @@ setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
 
 f.onsubmit=e=>{e.preventDefault();
   const c=f.c.value.trim(), P=f.P.value.replaceAll(' ',''), s=f.s.value.trim();
-//c.toLowerCase()==cs.c.toLowerCase()&&s.toLowerCase()==cs.s.toLowerCase()
   for (const cs of I) if (c==cs.c&&s==cs.s&&i!=I.indexOf(cs)) {
     m('Already added'); f.s.focus(); return;}
   if (!/^[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*$/.test(P)) {m(`Enter cell codes, comma-separated (see example above)`); f.P.focus(); return;}
   m(i==I.length?'Added':'Saved',1);
   I.splice(i,1,{c,P:[...new Set(P.split(/,+/))].sort((a,b)=>
-    a[0]*10+Number(a.slice(1))-b[0]*10-b.slice(1)),u:Number(f.u.value)||3,s});
+    a[0]*10+(+a.slice(1))-b[0]*10-b.slice(1)),u:+f.u.value||3,s});
   uI();};
 
 f.c.onchange=()=>{for (const {c,u} of I) if (f.c.value.trim()==c) {
