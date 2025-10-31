@@ -133,7 +133,7 @@ footer>small {color: #000; padding-inline: .6em;}
     <h1><a href="#">SemSched</a></h1>
     <p>
       Planning next semester? Add your course sections/groups and <strong>rank them by priority</strong>. You'll see schedules with the <b>fewest days</b> (if you need every course), or schedules with the <b>most credits/courses</b>.<br>
-      Edit the example: <span>MATH 101-02 (3) — 25,26,55,56</span>. (<code>25 = row 2, col 5</code>)
+      Edit or deselect the example: <span>MATH 101-02 (3) — 25,26,55,56</span>. (<code>25 = row 2, col 5</code>)
     </p>
   </header>
   <main>
@@ -145,7 +145,7 @@ footer>small {color: #000; padding-inline: .6em;}
         <input name="s" class="ib i">
       </label>
       <label><span>Credits</span>
-        <input type="number" name="u" min=".5" max="8" step=".5" class="ib i">
+        <input type="number" name="u" min="0" max="10" step=".5" class="ib i">
       </label>
       <label><span>Periods</span>
         <input name="P" class="ib i">
@@ -191,165 +191,58 @@ const f=document.forms[0], d=f.querySelector('dialog'),
   ni=document.querySelector('p+label>.i'),
   T=document.querySelector('template').content,
   ol=document.querySelector('template+p+ol'), l=document.querySelector('.l'),
-  I=JSON.parse(localStorage.getItem('I'))||[
-    // {c:'A',P:['11','12','41','42'],u:3,s:'1'},
-    // {c:'A',P:['13','14','43','44'],u:3,s:'2'},
-    // {c:'A',P:['15','16','45','46'],u:3,s:'3'},
-    // {c:'A',P:['17','18','47','48'],u:3,s:'4'},
-    // {c:'A',P:['21','22','51','52'],u:3,s:'5'},
-    // {c:'A',P:['23','24','53','54'],u:3,s:'6'},
-    // {c:'A',P:['25','26','55','56'],u:3,s:'7'},
-    // {c:'A',P:['27','28','57','58'],u:3,s:'8'},
-    // {c:'A',P:['31','32','61','62'],u:3,s:'9'},
-    // {c:'A',P:['33','34','63','64'],u:3,s:'10'},
-    // {c:'A',P:['35','36','65','66'],u:3,s:'11'},
-    // {c:'A',P:['37','38','67','68'],u:3,s:'12'},
-    // {c:'A',P:['71','72','73','74'],u:3,s:'13'},
-    // {c:'A',P:['75','76','77','78'],u:3,s:'14'},
-    // {c:'B',P:['11','12','41','42'],u:3,s:'1'},
-    // {c:'B',P:['13','14','43','44'],u:3,s:'2'},
-    // {c:'B',P:['15','16','45','46'],u:3,s:'3'},
-    // {c:'B',P:['17','18','47','48'],u:3,s:'4'},
-    // {c:'B',P:['21','22','51','52'],u:3,s:'5'},
-    // {c:'B',P:['23','24','53','54'],u:3,s:'6'},
-    // {c:'B',P:['25','26','55','56'],u:3,s:'7'},
-    // {c:'B',P:['27','28','57','58'],u:3,s:'8'},
-    // {c:'B',P:['31','32','61','62'],u:3,s:'9'},
-    // {c:'B',P:['33','34','63','64'],u:3,s:'10'},
-    // {c:'B',P:['35','36','65','66'],u:3,s:'11'},
-    // {c:'B',P:['37','38','67','68'],u:3,s:'12'},
-    // {c:'B',P:['71','72','73','74'],u:3,s:'13'},
-    // {c:'B',P:['75','76','77','78'],u:3,s:'14'},
-    // {c:'C',P:['11','12','41','42'],u:3,s:'1'},
-    // {c:'C',P:['13','14','43','44'],u:3,s:'2'},
-    // {c:'C',P:['15','16','45','46'],u:3,s:'3'},
-    // {c:'C',P:['17','18','47','48'],u:3,s:'4'},
-    // {c:'C',P:['21','22','51','52'],u:3,s:'5'},
-    // {c:'C',P:['23','24','53','54'],u:3,s:'6'},
-    // {c:'C',P:['25','26','55','56'],u:3,s:'7'},
-    // {c:'C',P:['27','28','57','58'],u:3,s:'8'},
-    // {c:'C',P:['31','32','61','62'],u:3,s:'9'},
-    // {c:'C',P:['33','34','63','64'],u:3,s:'10'},
-    // {c:'C',P:['35','36','65','66'],u:3,s:'11'},
-    // {c:'C',P:['37','38','67','68'],u:3,s:'12'},
-    // {c:'C',P:['71','72','73','74'],u:3,s:'13'},
-    // {c:'C',P:['75','76','77','78'],u:3,s:'14'},
-    // {c:'D',P:['11','12','41','42'],u:3,s:'1'},
-    // {c:'D',P:['13','14','43','44'],u:3,s:'2'},
-    // {c:'E',P:['15','16','45','46'],u:3,s:'3'},
-    // {c:'E',P:['17','18','47','48'],u:3,s:'4'},
-    // {c:'F',P:['21','22','51','52'],u:3,s:'5'},
-    // {c:'F',P:['23','24','53','54'],u:3,s:'6'},
-    // {c:'G',P:['25','26','55','56'],u:3,s:'7'},
-    // {c:'G',P:['27','28','57','58'],u:3,s:'8'},
-    // {c:'H',P:['31','32','61','62'],u:3,s:'9'},
-    // {c:'H',P:['33','34','63','64'],u:3,s:'10'},
-    // {c:'I',P:['35','36','65','66'],u:3,s:'11'},
-    // {c:'I',P:['37','38','67','68'],u:3,s:'12'},
-    // {c:'J',P:['71','72','73','74'],u:3,s:'13'},
-    // {c:'J',P:['75','76','77','78'],u:3,s:'14'},
-    // {c:'K',P:['11','12','41','42'],u:3,s:'1'},
-    // {c:'L',P:['13','14','43','44'],u:3,s:'2'},
-    // {c:'M',P:['15','16','45','46'],u:3,s:'3'},
-    // {c:'N',P:['17','18','47','48'],u:3,s:'4'},
-    // {c:'O',P:['21','22','51','52'],u:3,s:'5'},
-    // {c:'P',P:['23','24','53','54'],u:3,s:'6'},
-    // {c:'Q',P:['25','26','55','56'],u:3,s:'7'},
-    // {c:'R',P:['27','28','57','58'],u:3,s:'8'},
-    // {c:'S',P:['31','32','61','62'],u:3,s:'9'},
-    // {c:'T',P:['33','34','63','64'],u:3,s:'10'},
-    // {c:'K',P:['11','12','41','42'],u:3,s:'01'},
-    // {c:'L',P:['13','14','43','44'],u:3,s:'02'},
-    // {c:'M',P:['15','16','45','46'],u:3,s:'03'},
-    // {c:'N',P:['17','18','47','48'],u:3,s:'04'},
-    // {c:'O',P:['21','22','51','52'],u:3,s:'05'},
-    // {c:'P',P:['23','24','53','54'],u:3,s:'06'},
-    // {c:'Q',P:['25','26','55','56'],u:3,s:'07'},
-    // {c:'R',P:['27','28','57','58'],u:3,s:'08'},
-    // {c:'S',P:['31','32','61','62'],u:3,s:'09'},
-    // {c:'T',P:['33','34','63','64'],u:3,s:'010'},
-    // {c:'U',P:['35','36','65','66'],u:3,s:'11'},
-    // {c:'V',P:['37','38','67','68'],u:3,s:'12'},
-    // {c:'W',P:['71','72','73','74'],u:3,s:'13'},
-    // {c:'X',P:['75','76','77','78'],u:3,s:'14'},
-    // {c:'Y',P:['31','32','33','34','35','36','37'],u:3,s:'13'},
-    // {c:'Z',P:['18','28','38','48','58','68','78'],u:3,s:'14'},
-    // {c:'a',P:['11','21','31','41','51','61','71'],u:3,s:'15'},
-    // {c:'b',P:['12','22','32','42','52','62','72'],u:3,s:'16'},
-    // {c:'c',P:['13','23','33','43','53','63','73'],u:3,s:'17'},
-    // {c:'d',P:['14','24','34','44','54','64','74'],u:3,s:'18'},
-    // {c:'e',P:['15','25','35','45','55','65','75'],u:3,s:'19'},
-    // {c:'f',P:['16','26','36','46','56','66','76'],u:3,s:'20'},
-    // {c:'g',P:['17','27','37','47','57','67','77'],u:3,s:'21'},
-    // {c:'h',P:['11','21','31','41','51','61','71'],u:3,s:'15'},
-    // {c:'i',P:['12','22','32','42','52','62','72'],u:3,s:'16'},
-    // {c:'j',P:['13','23','33','43','53','63','73'],u:3,s:'17'},
-    // {c:'k',P:['14','24','34','44','54','64','74'],u:3,s:'18'},
-    // {c:'l',P:['15','25','35','45','55','65','75'],u:3,s:'19'},
-    // {c:'m',P:['16','26','36','46','56','66','76'],u:3,s:'20'},
-    // {c:'n',P:['17','27','37','47','57','67','77'],u:3,s:'21'},
+  cS=JSON.parse(localStorage.getItem('cS'))||[
     {c:'MATH 101',s:'02',u:3,P:['25','26','55','56']},
-    // {c:'MATH 101',P:['44','45','74','75'],u:3,s:'01'},
-    // {c:'MATH 101',P:['14','15','44','45'],u:3,s:'03'},
-    // {c:'MATH 101',P:['24','25','54','55'],u:3,s:'04'},
-    // {c:'Physics',P:['31','32','61','62'],u:3,s:'1'},
-    // {c:'Physics',P:['33','34','63','64'],u:3,s:'2'},
-    // {c:'Physics',P:['35','36','65','66'],u:3,s:'3'},
-    // {c:'Physics',P:['37','38','67','68'],u:3,s:'4'},
-    // {c:'Biology',P:['32','33','62','63'],u:3,s:'02'},
-    // {c:'Biology',P:['42','43','72','73'],u:3,s:'01'},
-    // {c:'Biology',P:['12','13','42','43'],u:3,s:'03'},
-    // {c:'Biology',P:['22','23','52','53'],u:3,s:'04'},
-    // {c:'MTE 211',P:['15','16','45','46'],u:2,s:'61'},
-    // {c:'MTE 211',P:['17','18','47','48'],u:2,s:'62'},
-    // {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'61'},
-    // {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'62'},
-    // {c:'MTE 226',P:['24','25','26','54','55','56'],u:3,s:'63'},
-    // {c:'MTE 156',P:['11','12','13','41','42'],u:3,s:'61'},
-    // {c:'MTE 156',P:['21','22','23','51','52'],u:3,s:'62'},
-    // {c:'MTE 156',P:['24','25','53','54','55'],u:3,s:'63'},
-    // {c:'ENG 172',P:['11','12','41','42'],u:2,s:'61'},
-    // {c:'ENG 172',P:['13','14','43','44'],u:2,s:'62'},
-    // {c:'ENG 172',P:['15','16','45','46'],u:2,s:'63'},
-    // {c:'MTE 250',P:['31','32','33','34','35','36','37'],u:3,s:'1'},
-    // {c:'MTE 250',P:['18','28','36','37','38','48','58'],u:3,s:'2'},
-    // {c:'MTE 213',P:['13','14','43','44'],u:2,s:'61'},
-    // {c:'MTE 213',P:['23','24','53','54'],u:2,s:'62'},
-    // {c:'MTE 213',P:['25','26','55','56'],u:2,s:'63'},
-    // {c:'MTE 244',P:['14','15','16'],u:1,s:'61'},
-    // {c:'MTE 244',P:['21','22','23'],u:1,s:'62'},
-    // {c:'MTE 244',P:['24','25','26'],u:1,s:'63'},
-    // {c:'MTE 244',P:['51','52','53'],u:1,s:'64'},
-    // {c:'MTE 244',P:['54','55','56'],u:1,s:'65'},
-    // {c:'ENG 173',P:['13','14','43','44'],u:2,s:'61'},
-    // {c:'ENG 173',P:['21','22','51','52'],u:2,s:'62'},
-    // {c:'MTE 251',P:['17','18','47','48'],u:2,s:''},
-    // {c:'MTE 241',P:['14','15','16'],u:2,s:''},
-    // {c:'MNG 201',P:['11','12','13'],u:2,s:'21'},
-    // {c:'MNG 201',P:['15','16','17'],u:2,s:'22'},
-    // {c:'MNG 201',P:['21','22','23'],u:2,s:'23'},
-    // {c:'MNG 201',P:['25','26','27'],u:2,s:'24'},
-    // {c:'MNG 201',P:['31','32','33'],u:2,s:'25'},
-    // {c:'MNG 201',P:['35','36','37'],u:2,s:'26'},
-    // {c:'MNG 201',P:['41','42','43'],u:2,s:'27'},
-    // {c:'MNG 201',P:['45','46','47'],u:2,s:'28'},
-    // {c:'MNG 201',P:['51','52','53'],u:2,s:'29'},
-    // {c:'MNG 201',P:['55','56','57'],u:2,s:'30'},
-    // {c:'MEC 256',P:['11','12','41','42'],u:3,s:'21'},
-    // {c:'MEC 256',P:['13','14','43','44'],u:3,s:'22'},
-    // {c:'MEC 256',P:['17','18','47','48'],u:3,s:'23'},
-    // {c:'ENG 277',P:['31','32','33','34'],u:3,s:'61'},
-    // {c:'ENG 277',P:['35','36','37','38'],u:3,s:'62'}
+    {c:'MTE 211',P:['15','16','45','46'],u:2,s:'61'},
+    {c:'MTE 211',P:['17','18','47','48'],u:2,s:'62'},
+    {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'61'},
+    {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'62'},
+    {c:'MTE 226',P:['24','25','26','54','55','56'],u:3,s:'63'},
+    {c:'MTE 156',P:['11','12','13','41','42'],u:3,s:'61'},
+    {c:'MTE 156',P:['21','22','23','51','52'],u:3,s:'62'},
+    {c:'MTE 156',P:['24','25','53','54','55'],u:3,s:'63'},
+    {c:'ENG 172',P:['11','12','41','42'],u:2,s:'61'},
+    {c:'ENG 172',P:['13','14','43','44'],u:2,s:'62'},
+    {c:'ENG 172',P:['15','16','45','46'],u:2,s:'63'},
+    {c:'MTE 250',P:['31','32','33','34','35','36','37'],u:3,s:'1'},
+    {c:'MTE 250',P:['18','28','36','37','38','48','58'],u:3,s:'2'},
+    {c:'MTE 213',P:['13','14','43','44'],u:2,s:'61'},
+    {c:'MTE 213',P:['23','24','53','54'],u:2,s:'62'},
+    {c:'MTE 213',P:['25','26','55','56'],u:2,s:'63'},
+    {c:'MTE 244',P:['14','15','16'],u:1,s:'61'},
+    {c:'MTE 244',P:['21','22','23'],u:1,s:'62'},
+    {c:'MTE 244',P:['24','25','26'],u:1,s:'63'},
+    {c:'MTE 244',P:['51','52','53'],u:1,s:'64'},
+    {c:'MTE 244',P:['54','55','56'],u:1,s:'65'},
+    {c:'ENG 173',P:['13','14','43','44'],u:2,s:'61'},
+    {c:'ENG 173',P:['21','22','51','52'],u:2,s:'62'},
+    {c:'MTE 251',P:['17','18','47','48'],u:2,s:''},
+    {c:'MTE 241',P:['14','15','16'],u:2,s:''},
+    {c:'MNG 201',P:['11','12','13'],u:2,s:'21'},
+    {c:'MNG 201',P:['15','16','17'],u:2,s:'22'},
+    {c:'MNG 201',P:['21','22','23'],u:2,s:'23'},
+    {c:'MNG 201',P:['25','26','27'],u:2,s:'24'},
+    {c:'MNG 201',P:['31','32','33'],u:2,s:'25'},
+    {c:'MNG 201',P:['35','36','37'],u:2,s:'26'},
+    {c:'MNG 201',P:['41','42','43'],u:2,s:'27'},
+    {c:'MNG 201',P:['45','46','47'],u:2,s:'28'},
+    {c:'MNG 201',P:['51','52','53'],u:2,s:'29'},
+    {c:'MNG 201',P:['55','56','57'],u:2,s:'30'},
+    {c:'MEC 256',P:['11','12','41','42'],u:3,s:'21'},
+    {c:'MEC 256',P:['13','14','43','44'],u:3,s:'22'},
+    {c:'MEC 256',P:['17','18','47','48'],u:3,s:'23'},
+    {c:'ENG 277',P:['31','32','33','34'],u:3,s:'61'},
+    {c:'ENG 277',P:['35','36','37','38'],u:3,s:'62'}
   ],
   cd=r=>{const D=[];
     for (const {P} of r.slice(1)) for (const [d] of P)
       if (!D.includes(d)) D.push(d);
     return D.length;},
   render=d=>{
-    if (!I.length) {
+    if (!cS.length) {
       l.hidden=ol.parentElement.hidden=t.parentElement.parentElement.hidden=true;
       return;}
-    let rows=''; for (const [i,{d,c,s,u,P}] of I.entries()) rows+=`<tr>
+    let rows=''; for (const [i,{d,c,s,u,P}] of cS.entries()) rows+=`<tr>
       <td><input type=number value=${i+1} ${d?'disabled':''} class="ib i" data-i=${i}></td>
       <td>${c}${s?'-'+s:''} (${u}) — ${P}</td>
       <td><button data-i=${i} class="ib b${d?'d">&nbsp;Delete':'e">&nbsp;Edit'}</button></td>
@@ -358,67 +251,54 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     t.parentElement.parentElement.hidden=false; t.innerHTML=rows;
     for (const i of t.querySelectorAll('.i')) i.onchange=()=>{
       if (i.value==='') {i.value=+i.dataset.i+1; return;}
-      const v=parseInt(i.value);
-      I.splice(v>0?v-1:v<-1?v+1:v==-1?I.length:0,0,I.splice(i.dataset.i,1)[0]);
-      uI();};
+      const v=parseInt(i.value), cs=cS.splice(i.dataset.i,1)[0], C=[];
+      cS.splice(v>0?v-1:v<-1?v+1:v==-1?cS.length:0,0,cs);
+      for (const {c,s} of cS) if (!C.includes(c)&&(c!=cs.c||s==cs.s)) C.push(c);
+      cS.sort((a,b)=>C.indexOf(a.c)-C.indexOf(b.c)); ucS();};
     for (const e of t.querySelectorAll('[type=checkbox]')) e.onchange=()=>{
-      I[e.dataset.i].d=!e.checked; uI();};
+      cS[e.dataset.i].d=!e.checked; ucS();};
 
     if (d) return;
-    const eI=I.filter(({d})=>!d), C=[], S=[], L=[[]], R=[], O=[];
-    if (!eI.length) {l.hidden=ol.parentElement.hidden=true; return;}
-    if (eI.length>40) {const CN=[]; let N=1;
-      If:for (const {c} of eI) {
-        for (const cn of CN) if (c==cn.c) {cn.n++; continue If;}
-        CN.push({c,n:1});}
-      for (const {n} of CN) N*=n;
-      if (N>2e6) {const C=[]; for (const {c} of CN) C.push(c);
-        ol.parentElement.firstElementChild.textContent=`Courses (${CN.length}):`;
-        ni.parentElement.previousElementSibling.textContent=C.join(', ');
-        N=N.toString();
+    const ecS=cS.filter(({d})=>!d), C=[], S=[], L=[[0]], O=[],
+      F=(i,l)=>{
+        if (i+1==S.length) L:for (const s of S[i]) {const r=[0], P=[];
+          l:for (const cs of l.concat(s)) {
+            for (const p of cs.P) if (P.includes(p))
+              if (C.slice(0,n).includes(cs.c)) continue L; else continue l;
+            r.push(cs); r[0]+=cs.u; for (const p of cs.P) P.push(p);}
+          if (n<C.length) {
+            if ((r.length-1)*(r[0]||1)==(L[0].length-1)*(L[0][0]||1)) L.push(r);
+            else if ((r.length-1)*(r[0]||1)>(L[0].length-1)*(L[0][0]||1)) {
+              L.length=0; L.push(r);}}
+          else {if (cd(r)==cd(L[0])) L.push(r);
+            else if (cd(r)<(cd(L[0])||7)) {L.length=0; L.push(r);}}}
+        else for (const s of S[i]) F(i+1,l.concat(s));};
+    if (!ecS.length) {l.hidden=ol.parentElement.hidden=true; return;}
+    for (const cs of ecS)
+      if (cs.c==C.at(-1)) S.at(-1).push(cs); else {C.push(cs.c); S.push([cs]);}
+    ol.parentElement.firstElementChild.textContent=`Courses (${C.length}):`;
+    ni.parentElement.previousElementSibling.textContent=C.join(', ');
+    if (ecS.length>50) {let N=1; for (const s of S) N*=s.length;
+      if (N>50e6) {N=N.toString();
         for (let i=N.length-3; i>0; i-=3) N=N.slice(0,i)+' '+N.slice(i);
         ol.previousElementSibling.hidden=false;
         ol.previousElementSibling.textContent=`Too many combinations (${N}) — deselect some sections`;
         ol.textContent=''; l.hidden=true; return;}}
     ol.parentElement.hidden=false; ol.previousElementSibling.hidden=true;
-    ni.value=n; l.hidden=eI.length/n**.05<30;
-    setTimeout(()=>{
-console.time('L');      for (const cs of eI) {
-        if (C.includes(cs.c)) {for (const l of L)
-          for (let i=0; i<l.length; i++)
-            if (cs.c==l[i].c) {if (S[C.indexOf(cs.c)]==l[i].s)
-              {const nl=l.toSpliced(i,1); nl.push(cs); L.push(nl);} break;};}
-        else {C.push(cs.c); S.push(cs.s); for (const l of L) l.push(cs);}}
-console.timeEnd('L');
-      ol.parentElement.firstElementChild.textContent=`Courses (${C.length}):`;
-      ni.parentElement.previousElementSibling.textContent=C.join(', ');
-console.time('R');console.log(L.length);
-      Lf:for (const l of L) {const r=[0], P=[];
-        lf:for (const cs of l) {
-          for (const p of cs.P) if (P.includes(p))
-            if (C.slice(0,n).includes(cs.c)) continue Lf; else continue lf;
-          r.push(cs); r[0]+=cs.u; for (const p of cs.P) P.push(p);}
-        R.push(r);}
-console.timeEnd('R');console.log(R.length);
-      if (R.length)
-        if (n<C.length) {R.sort((a,b)=>(b.length-1)*b[0]-(a.length-1)*a[0]);
-          const w=(R[0].length-1)*R[0][0];
-          Rf:for (const r of R) {if ((r.length-1)*r[0]!=w) break;
-            Of:for (const o of O) {
-              rf:for (let i=1; i<r.length; i++) {
-                for (let j=i; j<o.length; j++)
-                  if (r[i].c==o[i].c&&r[i].s==o[i].s) continue rf;
-                continue Of;}
-              continue Rf;}
-            O.push(r); if (O.length>99) break;}}
-        else {R.sort((a,b)=>cd(a)-cd(b)); const w=cd(R[0]);
-          for (const r of R) {if (cd(r)!=w) break; O.push(r);
-            if (O.length>99) break;}}
-      else {ol.previousElementSibling.hidden=false;
-        ol.previousElementSibling.textContent='No possible schedules — decrease the "Need first" value';};
+    ni.value=n; l.hidden=ecS.length/n**.05<30;
+    setTimeout(()=>{F(0,[]);
+      if (L[0].length==1) {ol.previousElementSibling.hidden=false;
+        ol.previousElementSibling.textContent='No possible schedules — decrease the "Need first" value';
+        L.length=0;}
+      else if (n<C.length) R:for (const r of L) {
+        O:for (const o of O) {
+          r:for (let i=1; i<r.length; i++) {
+            if (r[i].c!=o[i].c||r[i].s!=o[i].s) continue O;}
+          continue R;}
+        O.push(r); if (O.length>99) break;}
 
       ol.textContent='';
-      for (const o of O) {
+      for (const o of O.length?O:L.slice(0,100)) {
         const t=T.cloneNode(true),
           rows=t.firstElementChild.firstElementChild.firstElementChild.children;
         rows[0].children[0].textContent=o[0]+'/'+(o.length-1);
@@ -431,12 +311,12 @@ console.timeEnd('R');console.log(R.length);
           lp=p;}}
         ol.appendChild(t);}
       l.hidden=true;});},
-  uI=d=>{localStorage.setItem('I',JSON.stringify(I)); i=I.length; f.reset();
+  ucS=d=>{localStorage.setItem('cS',JSON.stringify(cS)); i=cS.length; f.reset();
     for (const e of f.elements) if (e!=b) e.previousElementSibling.className='';
     b.classList.remove('bs'); b.textContent=' Add'; render(d);},
   m=(m,b=0)=>{d.className='d d'+b; d.textContent=m; clearTimeout(to); d.show();
     to=setTimeout(()=>d.close(),4000);};
-let to, i=I.length, n=ni.value=localStorage.getItem('n')||1;
+let to, i=cS.length, n=ni.value=localStorage.getItem('n')||1;
 
 render();
 
@@ -449,25 +329,30 @@ setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
     i.previousElementSibling.className='';};}},225/*chrome*/);
 
 f.onsubmit=e=>{e.preventDefault();
-  const c=f.c.value.trim(), P=f.P.value.replaceAll(' ',''), s=f.s.value.trim();
-  for (const cs of I) if (c==cs.c&&s==cs.s&&i!=I.indexOf(cs)) {
+  const cs={c:f.c.value.trim(),s:f.s.value.trim(),u:+f.u.value||3,
+    P:f.P.value.replaceAll(' ','')};
+  for (const e of cS) if (cs.c==e.c&&cs.s==e.s&&i!=cS.indexOf(e)) {
     m('Already added'); f.s.focus(); return;}
-  if (!/^[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*$/.test(P)) {m(`Enter cell codes, comma-separated (see example above)`); f.P.focus(); return;}
-  m(i==I.length?'Added':'Saved',1);
-  I.splice(i,1,{c,P:[...new Set(P.split(/,+/))].sort((a,b)=>
-    a[0]*10+(+a.slice(1))-b[0]*10-b.slice(1)),u:+f.u.value||3,s});
-  uI();};
+  if (!/^[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*$/.test(cs.P)) {f.P.focus();
+    m(`Enter cell codes, comma-separated (see example above)`); return;}
+  cs.P=[...new Set(cs.P.split(/,+/))]
+    .sort((a,b)=>a[0]*10+(+a.slice(1))-b[0]*10-b.slice(1));
+  if (i==cS.length) {
+    for (let j=cS.length;j;) if (cs.c==cS[--j].c) {cS.splice(j+1,0,cs); break;}
+    if (i==cS.length) cS.push(cs); m('Added',1);}
+  else {cS.splice(i,1,cs); m('Saved',1);}
+  ucS();};
 
-f.c.onchange=()=>{for (const {c,u} of I) if (f.c.value.trim()==c) {
+f.c.onchange=()=>{for (const {c,u} of cS) if (f.c.value.trim()==c) {
   f.u.value=u; f.u.previousElementSibling.className='lu'; return;}};
 
 t.onclick=({target})=>{
   if (target.classList.contains('be')) {i=target.dataset.i;
-    for (const e of f.elements) if (e!=b) {e.value=I[i][e.name];
+    for (const e of f.elements) if (e!=b) {e.value=cS[i][e.name];
       e.previousElementSibling.className='lu';}
     f.c.focus(); b.classList.add('bs'); b.textContent=' Save';}
-  else if (target.classList.contains('bd')) {I.splice(target.dataset.i,1);
-    uI(1);}};
+  else if (target.classList.contains('bd')) {cS.splice(target.dataset.i,1);
+    ucS(1);}};
 
 ni.onchange=()=>{if (!+ni.value) {ni.value=n; return;}
   localStorage.setItem('n',n=Math.ceil(Math.abs(ni.value)));
