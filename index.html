@@ -133,7 +133,7 @@ footer>small {color: #000; padding-inline: .6em;}
     <h1><a href="#">SemSched</a></h1>
     <p>
       Planning next semester? Add your course sections/groups and <strong>rank them by priority</strong>. You'll see schedules with the <b>fewest days</b> (if you need every course), or schedules with the <b>most credits/courses</b>.<br>
-      Edit or deselect the example: <span>MATH 101-02 (3) — 25,26,55,56</span>. (<code>25 = day 2, period 5</code>)
+      Edit or deselect the example: <span>Math - 2/prof/hall (3) — 25,26,55,56</span>. (<code>25 = day 2, period 5</code>)
     </p>
   </header>
   <main>
@@ -333,8 +333,8 @@ f.onsubmit=e=>{e.preventDefault();
     P:f.P.value.replaceAll(' ','')};
   for (const e of cS) if (cs.c==e.c&&cs.s==e.s&&i!=cS.indexOf(e)) {
     m('Already added'); f.s.focus(); return;}
-  if (!/^[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*$/.test(cs.P)) {f.P.focus();
-    m(`Enter cell codes, comma-separated (see example above)`); return;}
+  if (!/^[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*$/.test(cs.P)) {
+    m(`Day period comma day period (see example above)`); f.P.focus(); return;}
   cs.P=[...new Set(cs.P.split(/,+/))]
     .sort((a,b)=>a[0]*10+(+a.slice(1))-b[0]*10-b.slice(1));
   if (i==cS.length) {
