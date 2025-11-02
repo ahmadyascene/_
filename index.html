@@ -202,7 +202,7 @@ const f=document.forms[0], d=f.querySelector('dialog'),
       return;}
     let rows=''; for (const [i,{d,c,s,u,P}] of cS.entries()) rows+=`<tr>
       <td><input type=number value=${i+1} ${d?'disabled':''} class="ib i" data-i=${i}></td>
-      <td>${c}${s?' - '+s:''} (${u}) — ${P}</td>
+      <td>${c}${s?'-'+s:''} (${u}) — ${P}</td>
       <td><button data-i=${i} class="ib b${d?'d">&nbsp;Delete':'e">&nbsp;Edit'}</button></td>
       <td><label><input type=checkbox ${d?'':'checked'} data-i=${i}>&nbsp;Selected</label></td>
     </tr>`;
@@ -265,7 +265,7 @@ const f=document.forms[0], d=f.querySelector('dialog'),
             rows[p[0]].children[p.slice(1)].hidden=true;
             rows[fp[0]].children[fp[1]].colSpan++;}
           else {fp=p;
-            rows[p[0]].children[p.slice(1)].textContent=c+(s?' - '+s:'')+' ('+u+')';}
+            rows[p[0]].children[p.slice(1)].textContent=c+(s?'-'+s:'')+' ('+u+')';}
           lp=p;}}
         ol.appendChild(t);}
       l.hidden=true;});},
