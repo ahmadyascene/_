@@ -39,9 +39,16 @@ button {-webkit-tap-highlight-color: #0000;}
 h1 {text-align: center;}
 h1>a {color: #596e79;}
 h1+p {text-align: justify;}
-h1+p>b {font-style: italic; font-weight: inherit;}
-code {background: #f8f9fa; font-family: inherit; padding-inline: .1875em;
-  border-radius: .25em;}
+h1+p>a {color: inherit; font-weight: 500; vertical-align: middle;
+  display: inline-flex; align-items: center; position: relative;
+  transition: color .15s;}
+h1+p>a:hover {color: #596e79;}
+h1+p>a::before {content: '';
+  background: linear-gradient(90deg,#596e79 50%,#0000 50%); width: 1.75em;
+  aspect-ratio: 1; border-radius: 50%;}
+h1+p>a::after {content: '\f04b'; background: #f0ece3; font: .5em/2.5 s;
+  text-align: center; width: 2.5em; border-radius: 50%; position: absolute;
+  left: .5em;}
 
 form {margin-bottom: 1em; display: grid; gap: .625em;}
 label:has(>span) {position: relative;}
@@ -82,7 +89,7 @@ th {font-weight: 500;}
 tbody>:nth-child(n+2)>* {border-top: .0625em solid #bec3c9;}
 td {text-align: center; white-space: nowrap;}
 
-:is(table,p+label) .i {appearance: textfield; text-align: center; width: 3em;
+:is(table,p+label) .i {appearance: textfield; text-align: center; width: 2.75em;
   aspect-ratio: 1.618034; padding: 0;}
 :is(table,p+label) .i::-webkit-inner-spin-button {display: none;}
 
@@ -99,12 +106,19 @@ td {text-align: center; white-space: nowrap;}
 .bd:active {color: #fff; background: #a52834;}
 .bd::before {content: '\f1f8'; font-family: s;}
 
-[type=checkbox] {width: 1.25em; height: 1.25em; margin: 0 .25em .1875em 0;
-  vertical-align: middle; accent-color: #596e79;}
+[type=checkbox] {accent-color: #596e79; vertical-align: middle; width: 1.2em;
+  height: 1.2em; margin: 0 .25em .1875em 0;}
 
 h2 {font-weight: 500; font-size: 1.125em; margin-block: 0; display: inline-block;}
 h2+p {margin-top: 0; display: inline-block;}
-p+label {width: fit-content; display: block;}
+p~label {width: fit-content; display: block;}
+p+label {margin-bottom: 1em;}
+select {background: 0; font-weight: inherit; font-size: inherit;
+  font-family: inherit; padding-block: .25em; padding-right: .5em;
+  border-color: #bec3c9; border-radius: .5em; transition: border-color .15s;}
+select:focus-visible {border-color: #596e79; outline: 0;}
+select:active {border-radius: .5em .5em 0 0;}
+option {font-weight: inherit;}
 
 template+p+ol {padding-left: 0; list-style: none;}
 ol tr>:nth-child(n+2) {border-left: .0625em solid #bec3c9;}
@@ -131,10 +145,7 @@ footer>small {color: #000; padding-inline: .6em;}
 <body>
   <header>
     <h1><a href="#">SemSched</a></h1>
-    <p>
-      Planning next semester? Add your course sections/groups and <strong>rank them by priority</strong>. You'll see schedules with the <b>fewest days</b> (if you need every course), or schedules with the <b>most credits/courses</b>.<br>
-      Edit or deselect the example: CAD-Afternoon (3) — 45,46,47,48. (<code>45 = day 4, period 5</code>)
-    </p>
+    <p>Finds schedules with the fewest days or the most credits/courses for the sections you enter. <a href="Screencast from 2025-11-05 15-25-35.webm">Video</a></p>
   </header>
   <main>
     <form>
@@ -157,7 +168,11 @@ footer>small {color: #000; padding-inline: .6em;}
     <div>
       <h2>Courses:</h2>
       <p></p>
-      <label>Need first <input type="number" class="ib i"></label>
+      <label>Require first <input type="number" class="ib i"></label>
+      <label>Schedules with <select>
+        <option>most credits/courses</option>
+        <option>fewest days</option>
+      </select></label>
       <template>
         <li><table><tbody>
           <tr><td></td><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th><th>P10</th></tr>
@@ -188,43 +203,129 @@ footer>small {color: #000; padding-inline: .6em;}
 'use strict';
 const f=document.forms[0], d=f.querySelector('dialog'),
   b=f.querySelector('button'), t=document.querySelector('tbody'),
-  ni=document.querySelector('p+label>.i'),
+  n=document.querySelector('p+label>.i'),
+  w=document.querySelector('select'),
   T=document.querySelector('template').content,
   ol=document.querySelector('template+p+ol'), l=document.querySelector('.l'),
-  cS=JSON.parse(localStorage.getItem('cS'))||[{c:'CAD',s:'Morning',u:3,P:['45','46','47','48']}],
+  cS=JSON.parse(localStorage.getItem('cS'))||[
+    {c:'Circuits',s:'61',u:2,P:['11','12','41','42']},
+    {c:'Circuits',s:'62',u:2,P:['13','14','43','44']},
+    {c:'Circuits',s:'63',u:2,P:['15','16','45','46']},
+    {c:'Materials',s:'61',u:2,P:['11','12','41','42']},
+    {c:'Materials',s:'62',u:2,P:['13','14','43','44']},
+    {c:'Materials',s:'63',u:2,P:['15','16','45','46']},
+    {c:'Mechanics',s:'21',u:2,P:['11','12','41','42']},
+    {c:'Mechanics',s:'22',u:2,P:['13','14','43','44']},
+    {c:'Mechanics',s:'23',u:2,P:['15','16','45','46']},
+    {c:'Mechanics',s:'24',u:2,P:['21','22','51','52']},
+    {c:'Mechanics',s:'25',u:2,P:['23','24','53','54']},
+    {c:'Mechanics',s:'26',u:2,P:['25','26','55','56']},
+    {c:'Programming',s:'61',u:2,P:['11','12','41','42']},
+    {c:'Programming',s:'62',u:2,P:['13','14','43','44']},
+    {c:'Programming',s:'63',u:2,P:['15','16','45','46']},
+    {c:'Programming',s:'64',u:2,P:['21','22','51','52']},
+    {c:'Programming',s:'65',u:2,P:['23','24','53','54']},
+    {c:'Programming',s:'66',u:2,P:['25','26','55','56']},
+    {c:'Programming',s:'67',u:2,P:['27','28','57','58']},
+    {c:'Solidworks',s:'Morning',u:1,P:['31','32','33','34']},
+    {c:'Solidworks',s:'Afternoon',u:1,P:['35','36','37','38']},
+    {c:'Math',s:'1',u:3,P:['11','12','41','42']},
+    {c:'Math',s:'2',u:3,P:['13','14','43','44']},
+    {c:'Math',s:'3',u:3,P:['15','16','45','46']},
+    {c:'Math',s:'4',u:3,P:['21','22','51','52']},
+    {c:'Math',s:'5',u:3,P:['23','24','53','54']},
+    {c:'Electrical',s:'1',u:2,P:['11','12','45']},
+    {c:'Electrical',s:'2',u:2,P:['11','12','52']},
+    {c:'Electrical',s:'3',u:2,P:['14','24','25']},
+    {c:'Electrical',s:'4',u:2,P:['24','25','42']},
+    {c:'Electrical',s:'5',u:2,P:['31','32','33']},
+    {c:'Electrical',s:'6',u:2,P:['31','32','34']},
+    {c:'Electrical',s:'7',u:2,P:['35','37','38']},
+    {c:'Electrical',s:'8',u:2,P:['36','37','38']},
+    {c:'Communication',s:'1',u:2,P:['14','15','16']},
+    {c:'Communication',s:'2',u:2,P:['21','22','23']},
+    {c:'Communication',s:'3',u:2,P:['24','25','26']},
+    {c:'Communication',s:'4',u:2,P:['31','32','33']},
+    {c:'Communication',s:'5',u:2,P:['34','35','36']},
+    {c:'Communication',s:'6',u:2,P:['41','42','43']},
+    {c:'Modern Egypt',s:'1',u:2,P:['11','12']},
+    {c:'Modern Egypt',s:'2',u:2,P:['17','18']},
+    {c:'Modern Egypt',s:'3',u:2,P:['47','48']},
+    // {c:'MTE 211',P:['15','16','45','46'],u:2,s:'61'},
+    // {c:'MTE 211',P:['17','18','47','48'],u:2,s:'62'},
+    // {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'61'},
+    // {c:'MTE 226',P:['21','22','23','51','52','53'],u:3,s:'62'},
+    // {c:'MTE 226',P:['24','25','26','54','55','56'],u:3,s:'63'},
+    // {c:'MTE 156',P:['11','12','13','41','42'],u:3,s:'61'},
+    // {c:'MTE 156',P:['21','22','23','51','52'],u:3,s:'62'},
+    // {c:'MTE 156',P:['24','25','53','54','55'],u:3,s:'63'},
+    // {c:'ENG 172',P:['11','12','41','42'],u:2,s:'61'},
+    // {c:'ENG 172',P:['13','14','43','44'],u:2,s:'62'},
+    // {c:'ENG 172',P:['15','16','45','46'],u:2,s:'63'},
+    // {c:'MTE 250',P:['31','32','33','34','35','36','37'],u:3,s:'1'},
+    // {c:'MTE 250',P:['18','28','36','37','38','48','58'],u:3,s:'2'},
+    // {c:'MTE 213',P:['13','14','43','44'],u:2,s:'61'},
+    // {c:'MTE 213',P:['23','24','53','54'],u:2,s:'62'},
+    // {c:'MTE 213',P:['25','26','55','56'],u:2,s:'63'},
+    // {c:'MTE 244',P:['14','15','16'],u:1,s:'61'},
+    // {c:'MTE 244',P:['21','22','23'],u:1,s:'62'},
+    // {c:'MTE 244',P:['24','25','26'],u:1,s:'63'},
+    // {c:'MTE 244',P:['51','52','53'],u:1,s:'64'},
+    // {c:'MTE 244',P:['54','55','56'],u:1,s:'65'},
+    // {c:'ENG 173',P:['13','14','43','44'],u:2,s:'61'},
+    // {c:'ENG 173',P:['21','22','51','52'],u:2,s:'62'},
+    // {c:'MTE 251',P:['17','18','47','48'],u:2,s:''},
+    // {c:'MTE 241',P:['14','15','16'],u:2,s:''},
+    // {c:'MNG 201',P:['11','12','13'],u:2,s:'21'},
+    // {c:'MNG 201',P:['15','16','17'],u:2,s:'22'},
+    // {c:'MNG 201',P:['21','22','23'],u:2,s:'23'},
+    // {c:'MNG 201',P:['25','26','27'],u:2,s:'24'},
+    // {c:'MNG 201',P:['31','32','33'],u:2,s:'25'},
+    // {c:'MNG 201',P:['35','36','37'],u:2,s:'26'},
+    // {c:'MNG 201',P:['41','42','43'],u:2,s:'27'},
+    // {c:'MNG 201',P:['45','46','47'],u:2,s:'28'},
+    // {c:'MNG 201',P:['51','52','53'],u:2,s:'29'},
+    // {c:'MNG 201',P:['55','56','57'],u:2,s:'30'},
+    // {c:'MEC 256',P:['11','12','41','42'],u:3,s:'21'},
+    // {c:'MEC 256',P:['13','14','43','44'],u:3,s:'22'},
+    // {c:'MEC 256',P:['17','18','47','48'],u:3,s:'23'},
+    // {c:'ENG 277',P:['31','32','33','34'],u:3,s:'61'},
+    // {c:'ENG 277',P:['35','36','37','38'],u:3,s:'62'}
+  ],
   cd=r=>{const D=[];
     for (const {P} of r.slice(1)) for (const [d] of P)
       if (!D.includes(d)) D.push(d);
     return D.length;},
-  render=d=>{
+  render=skip=>{
     if (!cS.length) {
       l.hidden=ol.parentElement.hidden=t.parentElement.parentElement.hidden=true;
       return;}
-    let rows=''; for (const [i,{d,c,s,u,P}] of cS.entries()) rows+=`<tr>
-      <td><input type=number value=${i+1} ${d?'disabled':''} class="ib i" data-i=${i}></td>
-      <td>${c}${s?'-'+s:''} (${u}) — ${P}</td>
-      <td><button data-i=${i} class="ib b${d?'d">&nbsp;Delete':'e">&nbsp;Edit'}</button></td>
-      <td><label><input type=checkbox ${d?'':'checked'} data-i=${i}>&nbsp;Selected</label></td>
-    </tr>`;
-    t.parentElement.parentElement.hidden=false; t.innerHTML=rows;
-    for (const i of t.querySelectorAll('.i')) i.onchange=()=>{
-      if (i.value==='') {i.value=+i.dataset.i+1; return;}
-      const v=parseInt(i.value), cs=cS.splice(i.dataset.i,1)[0], C=[];
-      cS.splice(v>0?v-1:v<-1?v+1:v==-1?cS.length:0,0,cs);
-      for (const {c,s} of cS) if (!C.includes(c)&&(c!=cs.c||s==cs.s)) C.push(c);
-      cS.sort((a,b)=>C.indexOf(a.c)-C.indexOf(b.c)); ucS();};
-    for (const e of t.querySelectorAll('[type=checkbox]')) e.onchange=()=>{
-      cS[e.dataset.i].d=!e.checked; ucS();};
+    if (skip!='in') {
+      let rows=''; for (const [i,{d,c,s,u,P}] of cS.entries()) rows+=`<tr>
+        <td><input type=number value=${i+1} ${d?'disabled':''} class="ib i" data-i=${i}></td>
+        <td>${c}${s?'-'+s:''} (${u}) — ${P}</td>
+        <td><button data-i=${i} class="ib b${d?'d">&nbsp;Delete':'e">&nbsp;Edit'}</button></td>
+        <td><label><input type=checkbox ${d?'':'checked'} data-i=${i}>&nbsp;Selected</label></td>
+      </tr>`;
+      t.parentElement.parentElement.hidden=false; t.innerHTML=rows;
+      for (const i of t.querySelectorAll('.i')) i.onchange=()=>{
+        if (i.value==='') {i.value=+i.dataset.i+1; return;}
+        const v=parseInt(i.value), cs=cS.splice(i.dataset.i,1)[0], C=[];
+        cS.splice(v>0?v-1:v<-1?v+1:v==-1?cS.length:0,0,cs);
+        for (const {c,s} of cS) if (!C.includes(c)&&(c!=cs.c||s==cs.s)) C.push(c);
+        cS.sort((a,b)=>C.indexOf(a.c)-C.indexOf(b.c)); ucS();};
+      for (const e of t.querySelectorAll('[type=checkbox]')) e.onchange=()=>{
+        cS[e.dataset.i].d=!e.checked; ucS();};}
 
-    if (d) return;
+    if (skip=='out') return;
     const ecS=cS.filter(({d})=>!d), C=[], S=[], L=[[0]], O=[],
       F=(i,l)=>{
         if (i+1==S.length) L:for (const s of S[i]) {const r=[0], P=[];
           l:for (const cs of l.concat(s)) {
             for (const p of cs.P) if (P.includes(p))
-              if (C.slice(0,n).includes(cs.c)) continue L; else continue l;
+              if (C.slice(0,n.value).includes(cs.c)) continue L; else continue l;
             r.push(cs); r[0]+=cs.u; for (const p of cs.P) P.push(p);}
-          if (n<C.length) {
+          if (w.value=='most credits/courses') {
             if ((r.length-1)*(r[0]||1)==(L[0].length-1)*(L[0][0]||1)) L.push(r);
             else if ((r.length-1)*(r[0]||1)>(L[0].length-1)*(L[0][0]||1)) {
               L.length=0; L.push(r);}}
@@ -235,28 +336,33 @@ const f=document.forms[0], d=f.querySelector('dialog'),
     for (const cs of ecS)
       if (cs.c==C.at(-1)) S.at(-1).push(cs); else {C.push(cs.c); S.push([cs]);}
     ol.parentElement.firstElementChild.textContent=`Courses (${C.length}):`;
-    ni.parentElement.previousElementSibling.textContent=C.join(', ');
-    if (ecS.length>50) {let N=1; for (const s of S) N*=s.length;
-      if (N>50e6) {N=N.toString();
+    n.parentElement.previousElementSibling.textContent=C.join(', ');
+    n.value=localStorage.getItem('n')||1;
+    w.value=localStorage.getItem('w')||'most credits/courses';
+    if (ecS.length>48) {let N=1; for (const s of S) N*=s.length;
+      if (N>44e6) {N=N.toString();
         for (let i=N.length-3; i>0; i-=3) N=N.slice(0,i)+' '+N.slice(i);
         ol.previousElementSibling.hidden=false;
         ol.previousElementSibling.textContent=`Too many combinations (${N}) — deselect some sections`;
         ol.textContent=''; l.hidden=true; return;}}
-    ol.parentElement.hidden=false; ol.previousElementSibling.hidden=true;
-    ni.value=n; l.hidden=ecS.length/n**.05<30;
+    ol.previousElementSibling.hidden=true; ol.parentElement.hidden=false;
+    l.hidden=ecS.length/n.value**.05<30;
     setTimeout(()=>{F(0,[]);
       if (L[0].length==1) {ol.previousElementSibling.hidden=false;
-        ol.previousElementSibling.textContent='No possible schedules — decrease the "Need first" value';
+        ol.previousElementSibling.textContent='No possible schedules';
         L.length=0;}
-      else if (n<C.length) R:for (const r of L) {
+      else R:for (const r of
+        w.value=='fewest days'?L.sort((a,b)=>b.length-a.length):L) {
         O:for (const o of O) {
           r:for (let i=1; i<r.length; i++) {
-            if (r[i].c!=o[i].c||r[i].s!=o[i].s) continue O;}
+            for (let j=i; j<o.length; j++)
+              if (r[i].c==o[j].c&&r[i].s==o[j].s) continue r;
+            continue O;}
           continue R;}
         O.push(r); if (O.length>99) break;}
 
       ol.textContent='';
-      for (const o of O.length?O:L.slice(0,100)) {
+      for (const o of O) {
         const t=T.cloneNode(true),
           rows=t.firstElementChild.firstElementChild.firstElementChild.children;
         rows[0].children[0].textContent=o[0]+'/'+(o.length-1);
@@ -269,12 +375,12 @@ const f=document.forms[0], d=f.querySelector('dialog'),
           lp=p;}}
         ol.appendChild(t);}
       l.hidden=true;});},
-  ucS=d=>{localStorage.setItem('cS',JSON.stringify(cS)); i=cS.length; f.reset();
+  ucS=skip=>{localStorage.setItem('cS',JSON.stringify(cS)); i=cS.length; f.reset();
     for (const e of f.elements) if (e!=b) e.previousElementSibling.className='';
-    b.classList.remove('bs'); b.textContent=' Add'; render(d);},
+    b.classList.remove('bs'); b.textContent=' Add'; render(skip);},
   m=(m,b=0)=>{d.className='d d'+b; d.textContent=m; clearTimeout(to); d.show();
     to=setTimeout(()=>d.close(),4000);};
-let to, i=cS.length, n=ni.value=localStorage.getItem('n')||1;
+let to, i=cS.length;
 
 render();
 
@@ -288,11 +394,12 @@ setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
 
 f.onsubmit=e=>{e.preventDefault();
   const cs={c:f.c.value.trim(),s:f.s.value.trim(),u:+f.u.value||3,
-    P:f.P.value.replaceAll(' ','')};
+    P:f.P.value.replace(/[ DPdp]/g,'')};
+  if (!cs.c) {m('Course required'); f.c.focus(); return;}
   for (const e of cS) if (cs.c==e.c&&cs.s==e.s&&i!=cS.indexOf(e)) {
     m('Already added'); f.s.focus(); return;}
   if (!/^[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*$/.test(cs.P)) {
-    m(`Day period comma day period (see example above)`); f.P.focus(); return;}
+    m(`<day><period> separated by commas — see video above`); f.P.focus(); return;}
   cs.P=[...new Set(cs.P.split(/,+/))]
     .sort((a,b)=>a[0]*10+(+a.slice(1))-b[0]*10-b.slice(1));
   if (i==cS.length) {
@@ -310,11 +417,13 @@ t.onclick=({target})=>{
       e.previousElementSibling.className='lu';}
     f.c.focus(); b.classList.add('bs'); b.textContent=' Save';}
   else if (target.classList.contains('bd')) {cS.splice(target.dataset.i,1);
-    ucS(1);}};
+    ucS('out');}};
 
-ni.onchange=()=>{if (!+ni.value) {ni.value=n; return;}
-  localStorage.setItem('n',n=Math.ceil(Math.abs(ni.value)));
+n.onchange=()=>{if (!+n.value) {n.value=localStorage.getItem('n')||1; return;}
+  localStorage.setItem('n',Math.ceil(Math.abs(n.value)));
   render();};
+
+w.onchange=()=>{localStorage.setItem('w',w.value); render('in');};
   </script>
 </body>
 </html>
