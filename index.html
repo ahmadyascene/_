@@ -27,7 +27,6 @@ body {color: #212529; font-weight: 300;
 @media (width>=62em) {body {width: 58.5em;}}
 
 a {-webkit-tap-highlight-color: #0000; outline: 0;}
-a:not(:focus-visible,:hover) {text-decoration: none;}
 p, h2 {line-height: 1.5;}
 .ib {font-size: inherit; line-height: 1.5; font-family: inherit;
   padding: .625em .75em; border: .0625em solid; border-radius: .5em;}
@@ -36,8 +35,14 @@ p, h2 {line-height: 1.5;}
 .i:focus {border-color: #596e79; outline: 0;}
 button {-webkit-tap-highlight-color: #0000;}
 
-h1 {text-align: center;}
-h1>a {color: #596e79;}
+h1 {width: fit-content; margin-inline: auto; position: relative;}
+h1::before {content: ''; background: #f0ece3; height: 21%;
+  border-radius: 0 0 .15em .15em; position: absolute; inset-inline: 0;
+  bottom: 12%; z-index: -1; transition: height .15s;}
+h1:has(>:focus-visible,>:hover)::before {height: 38%;}
+header a {text-decoration: none;}
+h1>a {color: #596e79; display: block;}
+
 h1+p {text-align: justify;}
 h1+p>a {color: inherit; font-weight: 500; vertical-align: middle;
   display: inline-flex; align-items: center; position: relative;
@@ -128,6 +133,7 @@ footer {margin-block: .25em; display: flex; flex-flow: wrap;
 footer>ul {list-style: none; padding-left: 0; margin-block: 0; display: flex;}
 footer a {color: inherit; line-height: 2em; font-family: b; text-align: center;
   width: 2em; display: block;}
+footer a:not(:focus-visible,:hover) {text-decoration: none;}
 footer ::before {vertical-align: bottom;}
 footer [href$=com]::before {content: 'AY'; font-size: .75em;}
 footer [href*=github]::before {content: '\f09b';}
@@ -314,7 +320,7 @@ f.onsubmit=e=>{e.preventDefault();
   for (const e of cS) if (cs.c==e.c&&cs.s==e.s&&i!=cS.indexOf(e)) {
     m('Already added'); f.s.focus(); return;}
   if (!/^[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*$/.test(cs.P)) {
-    m(`<day><period> separated by commas — see video above`); f.P.focus(); return;}
+    m(`<day><period>, comma-separated — see video`); f.P.focus(); return;}
   cs.P=[...new Set(cs.P.split(/,+/))]
     .sort((a,b)=>a[0]*10+(+a.slice(1))-b[0]*10-b.slice(1));
   if (i==cS.length) {
