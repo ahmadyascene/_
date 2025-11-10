@@ -48,7 +48,7 @@ h1+p {text-align: justify;}
 h1+p>a {color: inherit; font-weight: 500; vertical-align: middle;
   display: inline-flex; align-items: center; position: relative;
   transition: color .15s;}
-h1+p>a:hover {color: #596e79;}
+h1+p>a:is(:focus-visible,:hover) {color: #596e79;}
 h1+p>a::before {content: '';
   background: linear-gradient(90deg,#596e79 50%,#0000 50%); width: 1.75em;
   aspect-ratio: 1; border-radius: 50%;}
@@ -79,7 +79,7 @@ label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 
 .b {color: #fff; background: #596e79; border-color: #0000;
   transition: background .15s;}
-.b:focus-visible {outline: .1875em solid;}
+.b:focus-visible {outline: .1875em solid #f0ece3;}
 .b:enabled:hover {background: #647b87;}
 .b:enabled:active {background: #4e606a;}
 .b::before {content: '\2b'; font-family: s; vertical-align: bottom;}
@@ -121,7 +121,8 @@ p~label {width: fit-content; display: block;}
 p+label {margin-bottom: 1em;}
 select {background: 0; font-weight: inherit; font-size: inherit;
   font-family: inherit; padding-block: .25em; padding-right: .5em;
-  border-color: #bec3c9; border-radius: .5em; transition: border-color .15s;}
+  border: .0625em solid #bec3c9; border-radius: .5em;
+  transition: border-color .15s;}
 select:focus-visible {border-color: #596e79; outline: 0;}
 option {font-weight: inherit;}
 
@@ -315,7 +316,7 @@ setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
     i.previousElementSibling.className='';};}},225/*chrome*/);
 
 f.onsubmit=e=>{e.preventDefault();
-  const cs={c:f.c.value.trim(),s:f.s.value.trim(),u:+f.u.value||3,
+  const cs={c:f.c.value.trim(),s:f.s.value.trim(),u:+(f.u.value||3),
     P:f.P.value.replace(/[ DPdp]/g,'')};
   if (!cs.c) {m('Course required'); f.c.focus(); return;}
   for (const e of cS) if (cs.c==e.c&&cs.s==e.s&&i!=cS.indexOf(e)) {
