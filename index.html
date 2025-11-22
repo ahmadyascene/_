@@ -45,9 +45,16 @@ header a {text-decoration: none;}
 h1>a {color: #596e79; display: block;}
 
 h1+p {text-align: justify;}
+@keyframes b {50% {opacity: 0;}}
+.ty::after {content: ''; border-left: .0625em solid; border-radius: .04em;
+  margin-left: .1em; animation: .7s ease-in-out infinite b;} 
+.ty+a {opacity: 0;}
+
 h1+p>a {color: inherit; font-weight: 500; vertical-align: middle;
   display: inline-flex; align-items: center; position: relative;
-  transition: color .15s;}
+  transition: opacity .15s cubic-bezier(.75,0,.75,.9), color .15s;}
+@keyframes flash {50%, 63% {color: inherit;} 51.5%, 61.5% {color: #596e79;}}
+h1+p>a:not(:focus-visible,:hover) {animation: 10s linear infinite flash;}
 h1+p>a:is(:focus-visible,:hover) {color: #596e79;}
 h1+p>a::before {content: '';
   background: linear-gradient(90deg,#596e79 50%,#0000 50%); width: 1.75em;
@@ -152,7 +159,10 @@ footer>small {color: #000; padding-inline: .6em;}
 <body>
   <header>
     <h1><a href="#">SemSched</a></h1>
-    <p>Finds schedules with the fewest days or the most credits/courses for the sections you enter. <a href="SemSched video.mp4">See it in action</a></p>
+    <p>
+      <span>Finds schedules with the fewest days or the most credits/courses for the sections you enter.</span>
+      <a href="SemSched demo.mp4">Demo</a>
+    </p>
   </header>
   <main>
     <form>
@@ -208,7 +218,8 @@ footer>small {color: #000; padding-inline: .6em;}
   <div class="l"><img src="loading.gif" alt="Loading..."></div>
   <script>
 'use strict';
-const f=document.forms[0], d=f.querySelector('dialog'),
+const s=document.querySelector('h1+p>span'), st=s.textContent,
+  f=document.forms[0], d=f.querySelector('dialog'),
   b=f.querySelector('button'), t=document.querySelector('tbody'),
   n=document.querySelector('p+label>.i'),
   w=document.querySelector('select'),
@@ -301,10 +312,14 @@ const f=document.forms[0], d=f.querySelector('dialog'),
   ucS=skip=>{localStorage.setItem('cS',JSON.stringify(cS)); i=cS.length; f.reset();
     for (const e of f.elements) if (e!=b) e.previousElementSibling.className='';
     b.classList.remove('bs'); b.textContent=' Add'; render(skip);},
-  m=(m,b=0)=>{d.className='d d'+b; d.textContent=m; clearTimeout(to); d.show();
-    to=setTimeout(()=>d.close(),4000);};
-let to, i=cS.length;
+  m=(m,b=0)=>{d.className='d d'+b; d.textContent=m; clearTimeout(dt); d.show();
+    dt=setTimeout(()=>d.close(),4000);};
+let dt, i=cS.length;
 
+if (!cS.length) {let sti=0;
+  const si=setInterval(()=>{s.textContent=st.slice(0,sti);
+    if (sti++==st.length) {clearInterval(si); s.className='';}},50);
+  s.className='ty';}
 render();
 
 setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
@@ -322,7 +337,7 @@ f.onsubmit=e=>{e.preventDefault();
   for (const e of cS) if (cs.c==e.c&&cs.s==e.s&&i!=cS.indexOf(e)) {
     m('Already added'); f.s.focus(); return;}
   if (!/^[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*$/.test(cs.P)) {
-    m(`<day><period>, comma-separated — see video`); f.P.focus(); return;}
+    m(`<day><period>, comma-separated — see demo`); f.P.focus(); return;}
   cs.P=[...new Set(cs.P.split(/,+/))]
     .sort((a,b)=>a[0]*10+(+a.slice(1))-b[0]*10-b.slice(1));
   if (i==cS.length) {
