@@ -161,7 +161,7 @@ footer>small {color: #000; padding-inline: .6em;}
     <h1><a href="#">SemSched</a></h1>
     <p>
       <span>Finds schedules with the fewest days or the most credits/courses for the sections you enter.</span>
-      <a href="SemSched demo.mp4">Demo</a>
+      <a href="SemSched video.mp4">Demo</a>
     </p>
   </header>
   <main>
@@ -318,7 +318,7 @@ let dt, i=cS.length;
 
 if (!cS.length) {let sti=0; s.className='ty';
   setTimeout(()=>{const si=setInterval(()=>{s.textContent=st.slice(0,sti);
-    if (sti++==st.length) {clearInterval(si); s.className='';}},50);},150);}
+    if (sti++==st.length) {clearInterval(si); s.className='';}},50);},300);}
 render();
 
 setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
