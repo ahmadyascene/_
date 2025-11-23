@@ -316,10 +316,9 @@ const s=document.querySelector('h1+p>span'), st=s.textContent,
     dt=setTimeout(()=>d.close(),4000);};
 let dt, i=cS.length;
 
-if (!cS.length) {let sti=0;
-  const si=setInterval(()=>{s.textContent=st.slice(0,sti);
-    if (sti++==st.length) {clearInterval(si); s.className='';}},50);
-  s.className='ty';}
+if (!cS.length) {let sti=0; s.className='ty';
+  setTimeout(()=>{const si=setInterval(()=>{s.textContent=st.slice(0,sti);
+    if (sti++==st.length) {clearInterval(si); s.className='';}},50);},150);}
 render();
 
 setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
