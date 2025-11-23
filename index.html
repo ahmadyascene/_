@@ -318,7 +318,7 @@ let dt, i=cS.length;
 
 if (!cS.length) {let sti=0; s.className='ty';
   setTimeout(()=>{const si=setInterval(()=>{s.textContent=st.slice(0,sti);
-    if (sti++==st.length) {clearInterval(si); s.className='';}},50);},300);}
+    if (sti++==st.length) {clearInterval(si); s.className='';}},50);},150);}
 render();
 
 setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
