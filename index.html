@@ -76,7 +76,7 @@ span.lu {background: #fff; top: 0; translate: 1.28125em -50%; scale: .75;}
 label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 
 .d {box-shadow: .3em .3em .3em #0003; font-size: .9em; line-height: 1.7361;
-  max-width: min(25em,calc(100% - 3.2639em - 26px));
+  max-width: min(25em,calc(100% - 3.2639em - 22px));
   padding: .8333em .5556em .8333em 2.7083em; border: .069445em solid #bec3c9;
   outline: 0; border-radius: .9em; top: 40%; z-index: 1; translate: 0 -50%;}
 .d::before {position: absolute; left: .5556em;}
@@ -154,10 +154,8 @@ footer [href*=linkedin]::before {content: '\f08c';}
 footer [href*=wa]::before {content: '\f232';}
 footer>small {color: #000; padding-inline: .6em;}
 
-.l {background: #fff8; width: 100vw; height: 100vh; position: fixed; top: 0;
-  left: 0; z-index: 2;}
-.l>img {width: 20em; position: absolute; top: 50%; left: 50%;
-  translate: -50% -50%;}
+[src="loading.gif"] {width: 20em; position: fixed; top: 50%; left: 50%;
+  z-index: -1; translate: -50% -50%;}
   </style>
 </head>
 <body>
@@ -219,16 +217,17 @@ footer>small {color: #000; padding-inline: .6em;}
     </ul>
     <small>&copy; 2025 Ahmad Yascene</small>
   </footer>
-  <div class="l"><img src="loading.gif" alt="Loading..."></div>
+  <img src="loading.gif" alt="Loading...">
   <script>
 'use strict';
-const s=document.querySelector('h1+p>span'), st=s.textContent,
+const ty=document.querySelector('h1+p>span'), tyt=ty.textContent,
   f=document.forms[0], d=f.querySelector('dialog'),
   b=f.querySelector('button'), t=document.querySelector('tbody'),
   n=document.querySelector('p+label>.i'),
-  w=document.querySelector('select'),
+  dl=document.querySelector('select'),
   T=document.querySelector('template').content,
-  ol=document.querySelector('template+p+ol'), l=document.querySelector('.l'),
+  ol=document.querySelector('template+p+ol'),
+  l=document.querySelector('[src="loading.gif"]'),
   cS=JSON.parse(localStorage.getItem('cS'))||[],
   cd=r=>{const D=[];
     for (const {P} of r.slice(1)) for (const [d] of P)
@@ -256,27 +255,14 @@ const s=document.querySelector('h1+p>span'), st=s.textContent,
         cS[e.dataset.i].d=!e.checked; ucS();};}
 
     if (skip=='out') return;
-    const ecS=cS.filter(({d})=>!d), C=[], S=[], L=[[0]], O=[],
-      F=(i,l)=>{
-        if (i+1==S.length) L:for (const s of S[i]) {const r=[0], P=[];
-          l:for (const cs of l.concat(s)) {
-            for (const p of cs.P) if (P.includes(p))
-              if (C.slice(0,n.value).includes(cs.c)) continue L; else continue l;
-            r.push(cs); r[0]+=cs.u; for (const p of cs.P) P.push(p);}
-          if (w.value=='most credits/courses') {
-            if ((r.length-1)*(r[0]||1)==(L[0].length-1)*(L[0][0]||1)) L.push(r);
-            else if ((r.length-1)*(r[0]||1)>(L[0].length-1)*(L[0][0]||1)) {
-              L.length=0; L.push(r);}}
-          else {if (cd(r)==cd(L[0])) L.push(r);
-            else if (cd(r)<(cd(L[0])||7)) {L.length=0; L.push(r);}}}
-        else for (const s of S[i]) F(i+1,l.concat(s));};
+    const ecS=cS.filter(({d})=>!d), C=[], S=[], O=[];
     if (!ecS.length) {l.hidden=ol.parentElement.hidden=true; return;}
     for (const cs of ecS)
       if (cs.c==C.at(-1)) S.at(-1).push(cs); else {C.push(cs.c); S.push([cs]);}
     ol.parentElement.firstElementChild.textContent=`Courses (${C.length}):`;
     n.parentElement.previousElementSibling.textContent=C.join(', ');
     n.value=localStorage.getItem('n')||1;
-    w.value=localStorage.getItem('w')||'most credits/courses';
+    dl.value=localStorage.getItem('dl')||'most credits/courses';
     if (ecS.length>48) {let N=1; for (const s of S) N*=s.length;
       if (N>44e6) {N=N.toString();
         for (let i=N.length-3; i>0; i-=3) N=N.slice(0,i)+' '+N.slice(i);
@@ -285,12 +271,13 @@ const s=document.querySelector('h1+p>span'), st=s.textContent,
         ol.textContent=''; l.hidden=true; return;}}
     ol.previousElementSibling.hidden=true; ol.parentElement.hidden=false;
     l.hidden=ecS.length/n.value**.05<30;
-    setTimeout(()=>{F(0,[]);
+    w?.terminate(); w=new Worker('w.js'); w.postMessage([S,C,n.value,dl.value]);
+    w.onmessage=({data:L})=>{
       if (L[0].length==1) {ol.previousElementSibling.hidden=false;
         ol.previousElementSibling.textContent='No possible schedules';
         L.length=0;}
       else R:for (const r of
-        w.value=='fewest days'?L.sort((a,b)=>b.length-a.length):L) {
+        dl.value=='fewest days'?L.sort((a,b)=>b.length-a.length):L) {
         O:for (const o of O) {
           r:for (let i=1; i<r.length; i++) {
             for (let j=i; j<o.length; j++)
@@ -312,17 +299,17 @@ const s=document.querySelector('h1+p>span'), st=s.textContent,
             rows[p[0]].children[p.slice(1)].textContent=c+(s?'-'+s:'')+' ('+u+')';}
           lp=p;}}
         ol.appendChild(t);}
-      l.hidden=true;});},
+      l.hidden=true;};},
   ucS=skip=>{localStorage.setItem('cS',JSON.stringify(cS)); i=cS.length; f.reset();
     for (const e of f.elements) if (e!=b) e.previousElementSibling.className='';
     b.classList.remove('bs'); b.textContent=' Add'; render(skip);},
   m=(m,b=0)=>{d.className='d d'+b; d.textContent=m; clearTimeout(dt); d.show();
     dt=setTimeout(()=>d.close(),4000);};
-let dt, i=cS.length;
+let dt, i=cS.length, w;
 
-if (!cS.length) {let sti=0; s.className='ty';
-  const si=setInterval(()=>{s.textContent=st.slice(0,sti);
-    if (sti++==st.length) {clearInterval(si); s.className='';}},50);}
+if (!cS.length) {let i=0; ty.className='ty';
+  const I=setInterval(()=>{ty.textContent=tyt.slice(0,i);
+    if (i++==tyt.length) {clearInterval(I); ty.className='';}},50);}
 render();
 
 setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
@@ -364,7 +351,7 @@ n.onchange=()=>{if (!+n.value) {n.value=localStorage.getItem('n')||1; return;}
   localStorage.setItem('n',Math.ceil(Math.abs(n.value)));
   render();};
 
-w.onchange=()=>{localStorage.setItem('w',w.value); render('in');};
+dl.onchange=()=>{localStorage.setItem('dl',dl.value); render('in');};
   </script>
 </body>
 </html>
