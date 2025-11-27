@@ -29,7 +29,7 @@ body {color: #212529; font-weight: 300;
 a {-webkit-tap-highlight-color: #0000; outline: 0;}
 p, h2 {line-height: 1.5;}
 .ib {font-size: inherit; line-height: 1.5; font-family: inherit;
-  padding: .625em .75em; border: .0625em solid; border-radius: .5em;}
+  padding: .625em 1.5em; border: .0625em solid; border-radius: 1.5em;}
 .i {color: inherit; font-weight: inherit; width: 100%; border-color: #bec3c9;
   box-sizing: border-box; transition: border-color .15s;}
 .i:focus {border-color: #596e79; outline: 0;}
@@ -63,21 +63,22 @@ h1+p>a::after {content: '\f04b'; background: #f0ece3; font: .5em/2.5 s;
   text-align: center; width: 2.5em; border-radius: 50%; position: absolute;
   left: .5em;}
 
-form {margin-bottom: 1em; display: grid; gap: .625em;}
+form {padding: 1em .625em; border: .0625em solid #bec3c9; border-radius: 1em;
+  margin-bottom: 1em; display: grid; gap: .625em; position: relative;}
 label:has(>span) {position: relative;}
 label>span {color: #6c757d; text-overflow: ellipsis; white-space: nowrap;
-  max-width: calc(100% - 1.625em); padding-inline: .25em; overflow: hidden;
-  position: absolute; transform-origin: 0; translate: .5625em -50%;
+  max-width: calc(100% - 1.625em); padding-inline: .375em; overflow: hidden;
+  position: absolute; transform-origin: 0; translate: 1.1875em -50%;
   transition: color .15s, background .15s, top .15s, translate .15s, scale .15s;
   -webkit-user-select: none; user-select: none; pointer-events: none;}
 label>span:not(.lu) {top: 50%;}
-span.lu {background: var(--g,#fff); top: 0; translate: .625em -50%; scale: .75;}
+span.lu {background: #fff; top: 0; translate: 1.28125em -50%; scale: .75;}
 label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 
 .d {box-shadow: .3em .3em .3em #0003; font-size: .9em; line-height: 1.7361;
   max-width: min(25em,calc(100% - 3.2639em - 26px));
   padding: .8333em .5556em .8333em 2.7083em; border: .069445em solid #bec3c9;
-  outline: 0; border-radius: .5em; z-index: 1; translate: 0 1.770834em;}
+  outline: 0; border-radius: .9em; top: 40%; z-index: 1; translate: 0 -50%;}
 .d::before {position: absolute; left: .5556em;}
 .d0::before {content: '!'; color: #fff; background: #ff8c00; font-weight: 700;
   text-align: center; width: 1.7361em; border-radius: .25em;}
@@ -92,6 +93,7 @@ label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 .b::before {content: '\2b'; font-family: s; vertical-align: bottom;}
 .bs::before {content: '\f00c';}
 @media (width>=36em) {form {grid-template-columns: 1fr 1fr;}
+  .d {top: 33.333333%;}
   .b {grid-column: 1/-1;}}
 
 :has(>table) {overflow: auto; margin-bottom: 1em;}
@@ -105,8 +107,9 @@ td {text-align: center; white-space: nowrap;}
 :is(table,p+label) .i {appearance: textfield; text-align: center; width: 2.75em;
   aspect-ratio: 1.618034; padding: 0;}
 :is(table,p+label) .i::-webkit-inner-spin-button {display: none;}
+table .i:disabled {background: #efefef4d;}
 
-.be, .bd {background: 0; padding: .375em .75em; border-color: #0000;
+.be, .bd {background: 0; padding: .375em 1em; border-color: #0000;
   transition: color .15s, background .15s;}
 .be {color: #596e79;}
 .be:focus-visible {outline: .0625em solid #647b87;}
@@ -121,15 +124,16 @@ td {text-align: center; white-space: nowrap;}
 
 [type=checkbox] {accent-color: #596e79; vertical-align: middle; width: 1.2em;
   height: 1.2em; margin: 0 .25em .1875em 0;}
+[type=checkbox]:focus-visible {outline: .075em solid #647b87;
+  outline-offset: .15em;}
 
 h2 {font-weight: 500; font-size: 1.125em; margin-block: 0; display: inline-block;}
 h2+p {margin-top: 0; display: inline-block;}
 p~label {width: fit-content; display: block;}
 p+label {margin-bottom: 1em;}
 select {background: 0; font-weight: inherit; font-size: inherit;
-  font-family: inherit; padding-block: .25em; padding-right: .5em;
-  border: .0625em solid #bec3c9; border-radius: .5em;
-  transition: border-color .15s;}
+  font-family: inherit; padding: .25em; border: .0625em solid #bec3c9;
+  border-radius: 1em; transition: border-color .15s;}
 select:focus-visible {border-color: #596e79; outline: 0;}
 option {font-weight: inherit;}
 
