@@ -229,10 +229,6 @@ const ty=document.querySelector('h1+p>span'), tyt=ty.textContent,
   ol=document.querySelector('template+p+ol'),
   l=document.querySelector('[src="loading.gif"]'),
   cS=JSON.parse(localStorage.getItem('cS'))||[],
-  cd=r=>{const D=[];
-    for (const {P} of r.slice(1)) for (const [d] of P)
-      if (!D.includes(d)) D.push(d);
-    return D.length;},
   render=skip=>{
     if (!cS.length) {
       l.hidden=ol.parentElement.hidden=t.parentElement.parentElement.hidden=true;
