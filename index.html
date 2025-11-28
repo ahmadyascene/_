@@ -37,7 +37,7 @@ button {-webkit-tap-highlight-color: #0000;}
 
 h1 {font-size: 2.25em; width: fit-content; margin-inline: auto;
   position: relative;}
-h1::before {content: ''; background: #f0ece3; height: 21.5%;
+h1::before {content: ''; background: #f7f3ee; height: 21.5%;
   border-radius: 0 0 .15em .15em; position: absolute; inset-inline: 0;
   bottom: 12%; z-index: -1; transition: height .15s;}
 h1:has(>:focus-visible,>:hover)::before {height: 38.5%;}
@@ -59,7 +59,7 @@ h1+p>a:is(:focus-visible,:hover) {color: #596e79;}
 h1+p>a::before {content: '';
   background: linear-gradient(90deg,#596e79 50%,#0000 50%); width: 1.75em;
   aspect-ratio: 1; border-radius: 50%;}
-h1+p>a::after {content: '\f04b'; background: #f0ece3; font: .5em/2.5 s;
+h1+p>a::after {content: '\f04b'; background: #f7f3ee; font: .5em/2.5 s;
   text-align: center; width: 2.5em; border-radius: 50%; position: absolute;
   left: .5em;}
 
@@ -87,7 +87,7 @@ label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 
 .b {color: #fff; background: #596e79; border-color: #0000;
   transition: background .15s;}
-.b:focus-visible {outline: .1875em solid #f0ece3;}
+.b:focus-visible {outline: .125em solid #596e79; outline-offset: -.0625em;}
 .b:enabled:hover {background: #647b87;}
 .b:enabled:active {background: #4e606a;}
 .b::before {content: '\2b'; font-family: s; vertical-align: bottom;}
