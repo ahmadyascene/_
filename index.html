@@ -104,8 +104,8 @@ th {font-weight: 500;}
 tbody>:nth-child(n+2)>* {border-top: .0625em solid #bec3c9;}
 td {text-align: center; white-space: nowrap;}
 
-:is(table,p+label) .i {appearance: textfield; text-align: center; width: 2.75em;
-  aspect-ratio: 1.618034; padding: 0;}
+:is(table,p+label) .i {appearance: textfield; line-height: 1; text-align: center;
+  width: 2.75em; aspect-ratio: 1.618034; padding: 0;}
 :is(table,p+label) .i::-webkit-inner-spin-button {display: none;}
 table .i:disabled {background: #efefef4d;}
 
@@ -318,7 +318,7 @@ setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
 
 f.onsubmit=e=>{e.preventDefault();
   const cs={c:f.c.value.trim(),s:f.s.value.trim(),u:+(f.u.value||3),
-    P:f.P.value.replace(/[ DPdp]/g,'')};
+    P:f.P.value.replace(/[ DPdp]|^,+|,+$/g,'')};
   if (!cs.c) {m('Course required'); f.c.focus(); return;}
   for (const e of cS) if (cs.c==e.c&&cs.s==e.s&&i!=cS.indexOf(e)) {
     m('Already added'); f.s.focus(); return;}
