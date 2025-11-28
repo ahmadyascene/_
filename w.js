@@ -1,5 +1,9 @@
 onmessage=({data:[S,C,n,dl]})=>{
   const L=[[0]],
+    cd=r=>{const D=[];
+      for (const {P} of r.slice(1)) for (const [d] of P)
+        if (!D.includes(d)) D.push(d);
+      return D.length;},
     F=(i,l)=>{
       if (i+1==S.length) L:for (const s of S[i]) {const r=[0], P=[];
         l:for (const cs of l.concat(s)) {
