@@ -270,7 +270,7 @@ const ty=document.querySelector('h1+p>span'), tyt=ty.textContent,
     l.hidden=ecS.length/n.value**.05<30;
     w?.terminate(); w=new Worker('w.js'); w.postMessage([S,C,n.value,dl.value]);
     w.onmessage=({data:L})=>{
-      if (typeof L=='number') {l.style.setProperty('--p',L); return;}
+      if (typeof L=='string') {l.style.setProperty('--p',L); return;}
       if (L[0].length==1) {ol.previousElementSibling.hidden=false;
         ol.previousElementSibling.textContent='No possible schedules';
         L.length=0;}
