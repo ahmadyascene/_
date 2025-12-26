@@ -27,52 +27,59 @@ body {color: #212529; font-weight: 300;
 @media (width>=62em) {body {width: 58.5em;}}
 
 a {-webkit-tap-highlight-color: #0000; outline: 0;}
-p, h2 {line-height: 1.5;}
+p {line-height: 1.5;}
 .ib {font-size: inherit; line-height: 1.5; font-family: inherit;
-  padding: .625em 1.5em; border: .0625em solid; border-radius: 1.5em;}
-.i {color: inherit; font-weight: inherit; width: 100%; border-color: #bec3c9;
+  padding: .625em 1.625em; border: .0625em solid; border-radius: 1.5em;}
+.i {color: inherit; font-weight: 300; width: 100%; border-color: #bec3c9;
   box-sizing: border-box; transition: border-color .15s;}
 .i:focus {border-color: #596e79; outline: 0;}
 button {-webkit-tap-highlight-color: #0000;}
 
-h1 {font-size: 2.25em; width: fit-content; margin-inline: auto;
-  position: relative;}
-h1::before {content: ''; background: #f7f3ee; height: 21.5%;
-  border-radius: 0 0 .15em .15em; position: absolute; inset-inline: 0;
-  bottom: 12%; z-index: -1; transition: height .15s;}
-h1:has(>:focus-visible,>:hover)::before {height: 38.5%;}
-header a {text-decoration: none;}
-h1>a {color: #596e79; display: block;}
+header {padding-top: 2.875em;}
+header>div {background: #f9f9f9cc; backdrop-filter: blur(24px);
+  padding: .25em .75em; display: flex; justify-content: space-between;
+  align-items: center; position: fixed; inset: 0 0 auto; z-index: 2;
+  transition: translate .3s cubic-bezier(.33,1,.68,1);}
+@media (width>=36em) {header>div {padding-inline: calc((100% - 32.25em)/2);}}
+@media (width>=48em) {header>div {padding-inline: calc((100% - 43.5em)/2);}}
+@media (width>=62em) {header>div {padding-inline: calc((100% - 58.5em)/2);}}
 
-h1+p {text-align: justify;}
-@keyframes b {50% {opacity: 0;}}
-.ty::after {content: ''; border-left: .0625em solid; border-radius: .04em;
-  margin-left: .1em; animation: .7s ease-in-out infinite b;} 
-.ty+a {opacity: 0;}
+h1 {margin-block: 0;}
+h1>a {color: #596e79; text-decoration: none; display: flex; align-items: center;
+  column-gap: .25em;}
+h1 img {width: 1em;}
 
-h1+p>a {color: inherit; font-weight: 500; vertical-align: middle;
-  display: inline-flex; align-items: center; position: relative;
-  transition: opacity .15s cubic-bezier(.75,0,.75,.9), color .15s;}
-@keyframes flash {50%, 63% {color: inherit;} 51.5%, 61.5% {color: #596e79;}}
-h1+p>a:not(:focus-visible,:hover) {animation: 10s linear infinite flash;}
-h1+p>a:is(:focus-visible,:hover) {color: #596e79;}
-h1+p>a::before {content: '';
+header button {color: inherit; background: 0; font-weight: 500;
+  font-size: 1.125em; font-family: inherit; padding: 0; border: 0; display: flex;
+  align-items: center; position: relative; transition: color .15s;}
+header button:is(:focus-visible,:hover) {color: #596e79; outline: 0;}
+header button::before {content: '';
   background: linear-gradient(90deg,#596e79 50%,#0000 50%); width: 1.75em;
   aspect-ratio: 1; border-radius: 50%;}
-h1+p>a::after {content: '\f04b'; background: #f7f3ee; font: .5em/2.5 s;
+header button::after {content: '\f04b'; background: #f7f3ee; font: .5em/2.5 s;
   text-align: center; width: 2.5em; border-radius: 50%; position: absolute;
   left: .5em;}
+
+header dialog {max-width: initial; max-height: initial; padding: 0; border: 0;
+  border-radius: 1em;}
+header video {max-width: calc(100vw - 1.5em); max-height: calc(100vh - 1.5em);
+  outline: 0; display: block;} /*svh*/
+
+header>p {text-align: justify;}
+@keyframes b {50% {opacity: 0;}}
+.ty::after {content: ''; border-left: .0625em solid; border-radius: .04em;
+  margin-left: .1em; animation: .7s ease-in-out infinite b;}
 
 form {padding: 1em .625em; border: .0625em solid #bec3c9; border-radius: 1em;
   margin-bottom: 1em; display: grid; gap: .625em; position: relative;}
 label:has(>span) {position: relative;}
 label>span {color: #6c757d; text-overflow: ellipsis; white-space: nowrap;
   max-width: calc(100% - 1.625em); padding-inline: .375em; overflow: hidden;
-  position: absolute; transform-origin: 0; translate: 1.1875em -50%;
+  position: absolute; transform-origin: 0; translate: 1.34375em -50%;
   transition: color .15s, background .15s, top .15s, translate .15s, scale .15s;
   -webkit-user-select: none; user-select: none; pointer-events: none;}
 label>span:not(.lu) {top: 50%;}
-span.lu {background: #fff; top: 0; translate: 1.28125em -50%; scale: .75;}
+span.lu {background: #fff; top: 0; translate: 1.4375em -50%; scale: .75;}
 label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 
 .d {box-shadow: .3em .3em .3em #0003; font-size: .9em; line-height: 1.7361;
@@ -127,17 +134,23 @@ table .i:disabled {background: #efefef4d;}
 [type=checkbox]:focus-visible {outline: .075em solid #647b87;
   outline-offset: .15em;}
 
-h2 {font-weight: 500; font-size: 1.125em; margin-block: 0; display: inline-block;}
-h2+p {margin-top: 0; display: inline-block;}
-p~label {width: fit-content; display: block;}
+p:has(+label) {display: flex; flex-flow: wrap; column-gap: .173em;}
+p:has(+label)>span {font-weight: 500;}
+p~label {font-weight: 500; width: fit-content; display: block;}
 p+label {margin-bottom: 1em;}
-select {background: 0; font-weight: inherit; font-size: inherit;
-  font-family: inherit; padding: .25em; border: .0625em solid #bec3c9;
-  border-radius: 1em; transition: border-color .15s;}
-select:focus-visible {border-color: #596e79; outline: 0;}
+select {background: 0; font-weight: 300; font-size: inherit;
+  font-family: inherit; border: 0; outline: .0625em solid #bec3c9;
+  border-radius: 1em; outline-offset: .3125em; margin: .375em;
+  transition: outline-color .15s;}
+select:focus-visible {outline-color: #596e79;}
 option {font-weight: inherit;}
 
-template+p+ol {padding-left: 0; list-style: none;}
+.l {width: 10em; border: .125em solid #596e79; border-radius: .5em;
+  margin: 0 auto -.875em; position: sticky; top: 1em; translate: 0 .5625em;}
+.l::before {content: ''; background: #596e79; height: .625em; display: block;
+  transform-origin: 0; scale: var(--p,0) 1;}
+
+.l+ol {padding-left: 0; list-style: none;}
 ol tr>:nth-child(n+2) {border-left: .0625em solid #bec3c9;}
 
 footer {margin-block: .25em; display: flex; flex-flow: wrap;
@@ -153,19 +166,16 @@ footer [href*=github]::before {content: '\f09b';}
 footer [href*=linkedin]::before {content: '\f08c';}
 footer [href*=wa]::before {content: '\f232';}
 footer>small {color: #000; padding-inline: .6em;}
-
-[src="loading.gif"] {background: linear-gradient(90deg,#11609a .125em,#0000 .125em 19.875em,#11609a 19.875em) 0 100%/100% .625em no-repeat, linear-gradient(#11609a 20%,#0000 20% 80%,#11609a 80%) 0 100%/100% .625em no-repeat, linear-gradient(#20c19c) 0 19.4375em/var(--p,0) .5em no-repeat;
-  width: 20em; position: fixed; top: 50%; left: 50%; z-index: -1;
-  translate: -50% -50%;}
   </style>
 </head>
 <body>
   <header>
-    <h1><a href="#">SemSched</a></h1>
-    <p>
-      <span>Get schedules with fewest days or most credits/courses for your sections!</span>
-      <a href="SemSched video.mp4">Demo</a>
-    </p>
+    <div>
+      <h1><a href="#"><img src="logo.png" alt="logo"> SemSched</a></h1>
+      <button>Demo</button>
+      <dialog><video src="demo.mp4" controls></video></dialog>
+    </div>
+    <p>Find schedules with the fewest days or the most credits for next semester.</p>
   </header>
   <main>
     <form>
@@ -186,27 +196,28 @@ footer>small {color: #000; padding-inline: .6em;}
     </form>
     <div><table><tbody></tbody></table></div>
     <div>
-      <h2>Courses:</h2>
       <p></p>
       <label>Require first <input type="number" class="ib i"></label>
       <label>Schedules with <select>
         <option>most credits/courses</option>
         <option>fewest days</option>
       </select></label>
-      <template>
-        <li><table><tbody>
-          <tr><td></td><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th><th>P10</th></tr>
-          <tr><th>D1</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D2</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D3</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D4</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D5</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D6</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D7</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        </tbody></table></li>
-      </template>
+      <div class="l"></div>
+      <ol>
+        <template>
+          <li><table><tbody>
+            <tr><td></td><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th><th>P10</th></tr>
+            <tr><th>D1</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th>D2</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th>D3</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th>D4</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th>D5</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th>D6</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th>D7</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody></table></li>
+        </template>
+      </ol>
       <p></p>
-      <ol></ol>
     </div>
   </main>
   <footer>
@@ -218,17 +229,17 @@ footer>small {color: #000; padding-inline: .6em;}
     </ul>
     <small>&copy; 2025 Ahmad Yascene</small>
   </footer>
-  <img src="loading.gif" alt="Loading...">
   <script>
 'use strict';
-const ty=document.querySelector('h1+p>span'), tyt=ty.textContent,
+const h=document.querySelector('header>div'), dm=h.querySelector('dialog'),
+  ty=document.querySelector('header>p'), tyt=ty.textContent,
   f=document.forms[0], d=f.querySelector('dialog'),
   b=f.querySelector('button'), t=document.querySelector('tbody'),
   n=document.querySelector('p+label>.i'),
   dl=document.querySelector('select'),
-  T=document.querySelector('template').content,
-  ol=document.querySelector('template+p+ol'),
-  l=document.querySelector('[src="loading.gif"]'),
+  l=document.querySelector('.l'),
+  ol=l.nextElementSibling,
+  T=ol.firstElementChild.content,
   cS=JSON.parse(localStorage.getItem('cS'))||[],
   render=skip=>{
     if (!cS.length) {
@@ -256,23 +267,24 @@ const ty=document.querySelector('h1+p>span'), tyt=ty.textContent,
     if (!ecS.length) {l.hidden=ol.parentElement.hidden=true; return;}
     for (const cs of ecS)
       if (cs.c==C.at(-1)) S.at(-1).push(cs); else {C.push(cs.c); S.push([cs]);}
-    ol.parentElement.firstElementChild.textContent=`Courses (${C.length}):`;
-    n.parentElement.previousElementSibling.textContent=C.join(', ');
+    n.parentElement.previousElementSibling.innerHTML=
+      `<span>Courses (${C.length}):</span> `+C.join(', ');
     n.value=localStorage.getItem('n')||1;
     dl.value=localStorage.getItem('dl')||'most credits/courses';
     if (ecS.length>48) {let N=1; for (const s of S) N*=s.length;
       if (N>44e6) {N=N.toString();
         for (let i=N.length-3; i>0; i-=3) N=N.slice(0,i)+' '+N.slice(i);
-        ol.previousElementSibling.hidden=false;
-        ol.previousElementSibling.textContent=`Too many combinations (${N}) — deselect some sections`;
+        ol.nextElementSibling.hidden=false;
+        ol.nextElementSibling.textContent=`Too many combinations (${N}) — deselect some sections`;
         ol.textContent=''; l.hidden=true; return;}}
-    ol.previousElementSibling.hidden=true; ol.parentElement.hidden=false;
+    ol.nextElementSibling.hidden=true; ol.parentElement.hidden=false;
     l.hidden=ecS.length/n.value**.05<30;
     w?.terminate(); w=new Worker('w.js'); w.postMessage([S,C,n.value,dl.value]);
     w.onmessage=({data:L})=>{
       if (typeof L=='string') {l.style.setProperty('--p',L); return;}
-      if (L[0].length==1) {ol.previousElementSibling.hidden=false;
-        ol.previousElementSibling.textContent='No possible schedules';
+      l.style.setProperty('--p','100%');
+      if (L[0].length==1) {ol.nextElementSibling.hidden=false;
+        ol.nextElementSibling.textContent='No possible schedules';
         L.length=0;}
       else R:for (const r of
         dl.value=='fewest days'?L.sort((a,b)=>b.length-a.length):L) {
@@ -297,26 +309,27 @@ const ty=document.querySelector('h1+p>span'), tyt=ty.textContent,
             rows[p[0]].children[p.slice(1)].textContent=c+(s?'-'+s:'')+' ('+u+')';}
           lp=p;}}
         ol.appendChild(t);}
-      l.hidden=true;};},
+      setTimeout(()=>{l.hidden=true; l.style.setProperty('--p',0);});};},
   ucS=skip=>{localStorage.setItem('cS',JSON.stringify(cS)); i=cS.length; f.reset();
     for (const e of f.elements) if (e!=b) e.previousElementSibling.className='';
     b.classList.remove('bs'); b.textContent=' Add'; render(skip);},
   m=(m,b=0)=>{d.className='d d'+b; d.textContent=m; clearTimeout(dt); d.show();
     dt=setTimeout(()=>d.close(),4000);};
-let dt, i=cS.length, w;
+let y=scrollY, dt, i=cS.length, w;
 
 if (!cS.length) {let i=0; ty.className='ty';
   const I=setInterval(()=>{ty.textContent=tyt.slice(0,i);
-    if (i++==tyt.length) {clearInterval(I); ty.className='';}},50);}
+    if (i++==tyt.length) {clearInterval(I); ty.className='';
+      setTimeout(()=>dm.showModal(),4000)}},50);}
 render();
 
-setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
-  if (i.value) i.previousElementSibling.className='lu';
-  i.oninput=()=>{i.previousElementSibling.className='lu'; //firefox
-    /* if (i==_) {f(); _.oninput=f;} else */ i.oninput=null;};
-  i.onfocus=()=>i.previousElementSibling.className='lu';
-  i.onblur=()=>{if (!i.value&&!i.matches(':focus'))
-    i.previousElementSibling.className='';};}},225/*chrome*/);
+document.onscroll=()=>{h.style.translate=scrollY>46&&scrollY>y?'0 -100%':'';
+  y=scrollY;};
+
+dm.previousElementSibling.onclick=()=>{dm.showModal();
+  dm.firstElementChild.play();};
+dm.onclick=({target})=>{if (target==dm) dm.close();};
+dm.onclose=()=>dm.firstElementChild.pause();
 
 f.onsubmit=e=>{e.preventDefault();
   const cs={c:f.c.value.trim(),s:f.s.value.trim(),u:+(f.u.value||3),
@@ -333,6 +346,14 @@ f.onsubmit=e=>{e.preventDefault();
     if (i==cS.length) cS.push(cs); m('Added',1);}
   else {cS.splice(i,1,cs); m('Saved',1);}
   ucS();};
+
+setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
+  if (i.value) i.previousElementSibling.className='lu';
+  i.oninput=()=>{i.previousElementSibling.className='lu'; //firefox
+    /* if (i==_) {f(); _.oninput=f;} else */ i.oninput=null;};
+  i.onfocus=()=>i.previousElementSibling.className='lu';
+  i.onblur=()=>{if (!i.value&&!i.matches(':focus'))
+    i.previousElementSibling.className='';};}},225/*chrome*/);
 
 f.c.onchange=()=>{for (const {c,u} of cS) if (f.c.value.trim()==c) {
   f.u.value=u; f.u.previousElementSibling.className='lu'; return;}};
