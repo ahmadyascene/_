@@ -56,7 +56,7 @@ header button:is(:focus-visible,:hover) {color: #596e79; outline: 0;}
 header button::before {content: '';
   background: linear-gradient(90deg,#596e79 50%,#0000 50%); width: 1.75em;
   aspect-ratio: 1; border-radius: 50%;}
-header button::after {content: '\f04b'; background: #f7f3ee; font: .5em/2.5 s;
+header button::after {content: '\f04b'; background: #f0ece3; font: .5em/2.5 s;
   text-align: center; width: 2.5em; border-radius: 50%; position: absolute;
   left: .5em;}
 
@@ -145,9 +145,9 @@ select {background: 0; font-weight: 300; font-size: inherit;
 select:focus-visible {outline-color: #596e79;}
 option {font-weight: inherit;}
 
-.l {width: 10em; border: .125em solid #596e79; border-radius: .5em;
-  margin: 0 auto -.875em; position: sticky; top: 1em; translate: 0 .5625em;}
-.l::before {content: ''; background: #596e79; height: .625em; display: block;
+.l {background: #f0ece3; width: 10em; overflow: hidden; border-radius: .5em;
+  margin: 0 auto -1em; position: sticky; top: 2.875em; translate: 0 .5em;}
+.l::before {content: ''; background: #596e79; height: 1em; display: block;
   transform-origin: 0; scale: var(--p,0) 1;}
 
 .l+ol {padding-left: 0; list-style: none;}
