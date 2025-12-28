@@ -54,7 +54,7 @@ header button:is(:focus-visible,:hover) {color: #596e79; outline: 0;}
 header button::before {content: '';
   background: linear-gradient(90deg,#596e79 50%,#0000 50%); width: 1.75em;
   aspect-ratio: 1; border-radius: 50%;}
-header button::after {content: '\f04b'; background: #f0ece3; font: .5em/2.5 s;
+header button::after {content: '\f04b'; background: #fff; font: .5em/2.5 s;
   text-align: center; width: 2.5em; border-radius: 50%; position: absolute;
   left: .5em;}
 
@@ -80,6 +80,9 @@ label>span:not(.lu) {top: 50%;}
 span.lu {background: #fff; top: 0; translate: 1.4375em -50%; scale: .75;}
 label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 
+label>dialog {font-size: .625em; padding: 0; border: 0; border-radius: 1em;}
+:is(dialog,ol) tr>:nth-child(n+2) {border-left: .0625em solid #bec3c9;}
+
 .d {box-shadow: .3em .3em .3em #0003; font-size: .9em; line-height: 1.7361;
   max-width: min(25em,calc(100% - 3.2639em - 22px));
   padding: .8333em .5556em .8333em 2.7083em; border: .069445em solid #bec3c9;
@@ -87,8 +90,8 @@ label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 .d::before {position: absolute; left: .5556em;}
 .d0::before {content: '!'; color: #fff; background: #ff8c00; font-weight: 700;
   text-align: center; width: 1.7361em; border-radius: .25em;}
-.d1::before {content: '\f058'; color: #596e79; font-family: s; scale: 1.7361;
-  transform-origin: 0;}
+.d1::before {content: '\f058'; color: #596e79; font-family: s;
+  transform-origin: 0; scale: 1.7361;}
 
 .b {color: #fff; background: #596e79; border-color: #0000;
   transition: background .15s;}
@@ -143,13 +146,11 @@ select {background: 0; font-weight: 300; font-size: inherit;
 select:focus-visible {outline-color: #596e79;}
 option {font-weight: inherit;}
 
-.l {background: #f0ece3; width: 10em; overflow: hidden; border-radius: .5em;
+.l {background: #f9f9f9; width: 10em; overflow: hidden; border-radius: .5em;
   margin: 0 auto -1em; position: sticky; top: 2.875em; translate: 0 .5em;}
 .l::before {content: ''; background: #596e79; height: 1em; display: block;
   transform-origin: 0; scale: var(--p,0) 1;}
-
 .l+ol {padding-left: 0; list-style: none;}
-ol tr>:nth-child(n+2) {border-left: .0625em solid #bec3c9;}
 
 footer {margin-block: .25em; display: flex; flex-flow: wrap;
   justify-content: center; align-items: center; position: absolute;
@@ -188,6 +189,16 @@ footer>small {color: #000; padding-inline: .6em;}
       </label>
       <label><span>Periods</span>
         <input name="P" class="ib i">
+        <dialog><table><tbody>
+          <tr><th></th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th><th>P10</th></tr>
+          <tr><th>D1</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>D2</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>D3</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>D4</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>D5</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>D6</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>D7</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody></table></dialog>
       </label>
       <dialog class="d d0"></dialog>
       <button class="ib b">&nbsp;Add</button>
@@ -231,8 +242,9 @@ footer>small {color: #000; padding-inline: .6em;}
 'use strict';
 const h=document.querySelector('header>div'), dm=h.querySelector('dialog'),
   ty=document.querySelector('header>p'), tyt=ty.textContent,
-  f=document.forms[0], d=f.querySelector('dialog'),
-  b=f.querySelector('button'), t=document.querySelector('tbody'),
+  f=document.forms[0], tD=f.P.nextElementSibling.querySelectorAll('td'),
+  d=f.querySelector('.d'), b=f.querySelector('button'),
+  t=f.nextElementSibling.firstElementChild.firstElementChild,
   n=document.querySelector('p+label>.i'),
   dl=document.querySelector('select'),
   l=document.querySelector('.l'),
@@ -331,7 +343,7 @@ dm.onclose=()=>dm.firstElementChild.pause();
 
 f.onsubmit=e=>{e.preventDefault();
   const cs={c:f.c.value.trim(),s:f.s.value.trim(),u:+(f.u.value||3),
-    P:f.P.value.replace(/[ DPdp]|^,+|,+$/g,'')};
+    P:f.P.value.replace(/^,+|,+$/g,'')};
   if (!cs.c) {m('Course required'); f.c.focus(); return;}
   for (const e of cS) if (cs.c==e.c&&cs.s==e.s&&i!=cS.indexOf(e)) {
     m('Already added'); f.s.focus(); return;}
@@ -355,6 +367,26 @@ setTimeout(()=>{for (const i of document.querySelectorAll('label>span+.i')) {
 
 f.c.onchange=()=>{for (const {c,u} of cS) if (f.c.value.trim()==c) {
   f.u.value=u; f.u.previousElementSibling.className='lu'; return;}};
+
+f.P.addEventListener('focus',()=>{f.P.nextElementSibling.show(); f.P.focus();});
+document.onclick=({target,clientX,clientY})=>{
+  if (!f.P.nextElementSibling.open||target==f.P) return;
+  const {left,right,top,bottom}=f.P.nextElementSibling.getBoundingClientRect();
+  if (clientX<left||clientX>right||clientY<top||clientY>bottom)
+    f.P.nextElementSibling.close();};
+
+f.P.addEventListener('input',()=>{
+  if (/^,*[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*,*$/
+  .test(f.P.value=f.P.value.replaceAll(' ',''))) {
+    const P=f.P.value.split(/,+/);
+    for (const td of tD) td.style.background=
+      P.includes(`${td.parentElement.rowIndex}${td.cellIndex}`)?'#bec3c9':'';}
+  else for (const td of tD) td.style.background='';});
+f.P.nextElementSibling.onclick=({target})=>{if (target.tagName=='TD') {let P='';
+  target.style.background=target.style.background?'':'#bec3c9';
+  for (const td of tD) if (td.style.background)
+    P+=`,${td.parentElement.rowIndex}${td.cellIndex}`;
+  f.P.value=P.slice(1);}};
 
 t.onclick=({target})=>{
   if (target.classList.contains('be')) {i=target.dataset.i;
