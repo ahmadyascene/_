@@ -13,6 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <style>
 @font-face {font-family: s; src: url(fa-solid-900.woff2);}
+@font-face {font-family: r; src: url(fa-regular-400.woff2);}
 @font-face {font-family: b; src: url(fa-brands-400.woff2);}
 
 ::selection {color: #fff; background: #596e79;}
@@ -37,14 +38,14 @@ button {-webkit-tap-highlight-color: #0000;}
 
 header {padding-top: 2.875em;}
 header>div {background: #f9f9f9cc; backdrop-filter: blur(24px);
-  padding: .25em .75em; display: flex; justify-content: space-between;
-  align-items: center; position: fixed; inset: 0 0 auto; z-index: 2;
+  padding: .25em .75em; display: flex; align-items: center; column-gap: 1em;
+  position: fixed; inset: 0 0 auto; z-index: 2;
   transition: translate .3s cubic-bezier(.33,1,.68,1);}
 @media (width>=36em) {header>div {padding-inline: calc((100% - 32.25em)/2);}}
 @media (width>=48em) {header>div {padding-inline: calc((100% - 43.5em)/2);}}
 @media (width>=62em) {header>div {padding-inline: calc((100% - 58.5em)/2);}}
 
-h1 {margin-block: 0;}
+h1 {margin-block: 0; margin-right: auto;}
 h1>a {color: #596e79; text-decoration: none;}
 
 header button {color: inherit; background: 0; font-weight: 500;
@@ -61,7 +62,11 @@ header button::after {content: '\f04b'; background: #fff; font: .5em/2.5 s;
 header dialog {max-width: initial; max-height: initial; padding: 0; border: 0;
   border-radius: 1em;}
 header video {max-width: calc(100vw - 1.5em); max-height: calc(100vh - 1.5em);
-  outline: 0; display: block;} /*svh*/
+  outline: 0; display: block;}
+
+[href=starred] {color: #596e79;}
+[href=starred]:not(:focus-visible,:hover) {text-decoration: none;}
+[href=starred]::before {content: '\f005'; font: 1.5em r;}
 
 header>p {text-align: justify;}
 @keyframes b {50% {opacity: 0;}}
@@ -80,7 +85,7 @@ label>span:not(.lu) {top: 50%;}
 span.lu {background: #fff; top: 0; translate: 1.4375em -50%; scale: .75;}
 label:has(>input:focus)>span {color: #596e79; font-weight: 400;}
 
-label>dialog {font-size: .625em; padding: 0; border: 0; border-radius: 1em;}
+label>dialog {font-size: .7em; padding: 0; border: 0; border-radius: 1em;}
 :is(dialog,ol) tr>:nth-child(n+2) {border-left: .0625em solid #bec3c9;}
 
 .d {box-shadow: .3em .3em .3em #0003; font-size: .9em; line-height: 1.7361;
@@ -150,7 +155,11 @@ option {font-weight: inherit;}
   margin: 0 auto -1em; position: sticky; top: 2.875em; translate: 0 .5em;}
 .l::before {content: ''; background: #596e79; height: 1em; display: block;
   transform-origin: 0; scale: var(--p,0) 1;}
-.l+ol {padding-left: 0; list-style: none;}
+
+main ol {padding-left: 0; list-style: none;}
+.f {overflow: hidden; position: relative;}
+.f::before {content: '\f005'; color: #596e79; font-family: r; position: absolute;
+  top: 50%; left: 50%; translate: -50% -50%; scale: 15;}
 
 footer {margin-block: .25em; display: flex; flex-flow: wrap;
   justify-content: center; align-items: center; position: absolute;
@@ -170,65 +179,14 @@ footer>small {color: #000; padding-inline: .6em;}
 <body>
   <header>
     <div>
-      <h1><a href="#">SemSched</a></h1>
+      <h1><a href="/">SemSched</a></h1>
       <button>Demo</button>
       <dialog><video src="demo.mp4" controls></video></dialog>
+      <a href="starred"></a>
     </div>
     <p>Find schedules with the fewest days or the most credits for next semester.</p>
   </header>
-  <main>
-    <form>
-      <label><span>Course</span>
-        <input name="c" class="ib i">
-      </label>
-      <label><span>Section</span>
-        <input name="s" class="ib i">
-      </label>
-      <label><span>Credits</span>
-        <input type="number" name="u" min="0" max="10" step=".5" class="ib i">
-      </label>
-      <label><span>Periods</span>
-        <input name="P" class="ib i">
-        <dialog><table><tbody>
-          <tr><th></th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th><th>P10</th></tr>
-          <tr><th>D1</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D2</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D3</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D4</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D5</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D6</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          <tr><th>D7</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        </tbody></table></dialog>
-      </label>
-      <dialog class="d d0"></dialog>
-      <button class="ib b">&nbsp;Add</button>
-    </form>
-    <div><table><tbody></tbody></table></div>
-    <div>
-      <p></p>
-      <label>Require first <input type="number" class="ib i"></label>
-      <label>Schedules with <select>
-        <option>most credits/courses</option>
-        <option>fewest days</option>
-      </select></label>
-      <div class="l"></div>
-      <ol>
-        <template>
-          <li><table><tbody>
-            <tr><td></td><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th><th>P10</th></tr>
-            <tr><th>D1</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><th>D2</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><th>D3</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><th>D4</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><th>D5</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><th>D6</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            <tr><th>D7</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-          </tbody></table></li>
-        </template>
-      </ol>
-      <p></p>
-    </div>
-  </main>
+  <main></main>
   <footer>
     <ul>
       <li><a href="https://ahmadyascene.com" target="_blank"></a></li>
@@ -240,13 +198,69 @@ footer>small {color: #000; padding-inline: .6em;}
   </footer>
   <script>
 'use strict';
+
 const h=document.querySelector('header>div'), dm=h.querySelector('dialog'),
   ty=document.querySelector('header>p'), tyt=ty.textContent,
-  f=document.forms[0], tD=f.P.nextElementSibling.querySelectorAll('td'),
+  F=JSON.parse(localStorage.getItem('F'))||[],
+  main=()=>{
+document.body.children[1].innerHTML=`
+<form>
+  <label><span>Course</span>
+    <input name="c" class="ib i">
+  </label>
+  <label><span>Section</span>
+    <input name="s" class="ib i">
+  </label>
+  <label><span>Credits</span>
+    <input type="number" name="u" min="0" max="10" step=".5" class="ib i">
+  </label>
+  <label><span>Periods</span>
+    <input name="P" class="ib i">
+    <dialog><table><tbody>
+      <tr><th></th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th><th>P10</th></tr>
+      <tr><th>D1</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><th>D2</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><th>D3</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><th>D4</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><th>D5</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><th>D6</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><th>D7</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody></table></dialog>
+  </label>
+  <dialog class="d d0"></dialog>
+  <button class="ib b">&nbsp;Add</button>
+</form>
+<div><table><tbody></tbody></table></div>
+<div>
+  <p></p>
+  <label>Require first <input type="number" class="ib i"></label>
+  <label>Schedules with <select>
+    <option>most credits/courses</option>
+    <option>fewest days</option>
+  </select></label>
+  <div class="l"></div>
+  <ol>
+    <template>
+      <li><table><tbody>
+        <tr><td></td><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th><th>P10</th></tr>
+        <tr><th>D1</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><th>D2</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><th>D3</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><th>D4</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><th>D5</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><th>D6</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><th>D7</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody></table></li>
+    </template>
+  </ol>
+  <p></p>
+</div>`;
+
+const f=document.forms[0], tD=f.P.nextElementSibling.querySelectorAll('td'),
   d=f.querySelector('.d'), b=f.querySelector('button'),
   t=f.nextElementSibling.firstElementChild.firstElementChild,
   n=document.querySelector('p+label>.i'),
-  dl=document.querySelector('select'),
+  dc=document.querySelector('select'),
   l=document.querySelector('.l'),
   ol=l.nextElementSibling,
   T=ol.firstElementChild.content,
@@ -280,7 +294,7 @@ const h=document.querySelector('header>div'), dm=h.querySelector('dialog'),
     n.parentElement.previousElementSibling.innerHTML=
       `<span>Courses (${C.length}):</span> `+C.join(', ');
     n.value=localStorage.getItem('n')||1;
-    dl.value=localStorage.getItem('dl')||'most credits/courses';
+    dc.value=localStorage.getItem('dc')||'most credits/courses';
     if (ecS.length>48) {let N=1; for (const s of S) N*=s.length;
       if (N>44e6) {N=N.toString();
         for (let i=N.length-3; i>0; i-=3) N=N.slice(0,i)+' '+N.slice(i);
@@ -289,7 +303,7 @@ const h=document.querySelector('header>div'), dm=h.querySelector('dialog'),
         ol.textContent=''; l.hidden=true; return;}}
     ol.nextElementSibling.hidden=true; ol.parentElement.hidden=false;
     l.hidden=ecS.length/n.value**.05<30;
-    w?.terminate(); w=new Worker('w.js'); w.postMessage([S,C,n.value,dl.value]);
+    w?.terminate(); w=new Worker('w.js'); w.postMessage([S,C,n.value,dc.value]);
     w.onmessage=({data:L})=>{
       if (typeof L=='string') {l.style.setProperty('--p',L); return;}
       l.style.setProperty('--p','100%');
@@ -297,7 +311,7 @@ const h=document.querySelector('header>div'), dm=h.querySelector('dialog'),
         ol.nextElementSibling.textContent='No possible schedules';
         L.length=0;}
       else R:for (const r of
-        dl.value=='fewest days'?L.sort((a,b)=>b.length-a.length):L) {
+        dc.value=='fewest days'?L.sort((a,b)=>b.length-a.length):L) {
         O:for (const o of O) {
           r:for (let i=1; i<r.length; i++) {
             for (let j=i; j<o.length; j++)
@@ -319,27 +333,30 @@ const h=document.querySelector('header>div'), dm=h.querySelector('dialog'),
             rows[p[0]].children[p.slice(1)].textContent=c+(s?'-'+s:'')+' ('+u+')';}
           lp=p;}}
         ol.appendChild(t);}
+      for (const t of ol.children) t.ondblclick=()=>{
+        const o=t.outerHTML.replace(' class="f"',''), i=F.indexOf(o);
+        if (i==-1) F.push(o); else F.splice(i,1);
+        localStorage.setItem('F',JSON.stringify(F));
+        dm.nextElementSibling.hidden=!F.length; t.firstElementChild.className='f';
+        t.firstElementChild.animate([{offset:0,scale:135},{offset:.75,scale:15},
+          {offset:.9,opacity:1},{offset:1,opacity:0}],{pseudoElement:'::before',
+          duration:1000,easing:'ease',direction:i==-1?'normal':'reverse'})
+        .onfinish=()=>t.firstElementChild.removeAttribute('class');};
       setTimeout(()=>{l.hidden=true; l.style.setProperty('--p',0);});};},
   ucS=skip=>{localStorage.setItem('cS',JSON.stringify(cS)); i=cS.length; f.reset();
     for (const e of f.elements) if (e!=b) e.previousElementSibling.className='';
+    for (const td of tD) td.style.background='';
     b.classList.remove('bs'); b.textContent=' Add'; render(skip);},
   m=(m,b=0)=>{d.className='d d'+b; d.textContent=m; clearTimeout(dt); d.show();
     dt=setTimeout(()=>d.close(),4000);};
-let y=scrollY, dt, i=cS.length, w;
+let dt, i=cS.length, w;
 
+dm.nextElementSibling.hidden=!F.length; ty.hidden=false;
 if (!cS.length) {let i=0; ty.className='ty';
   const I=setInterval(()=>{ty.textContent=tyt.slice(0,i);
     if (i++==tyt.length) {clearInterval(I); ty.className='';
       setTimeout(()=>dm.showModal(),4000)}},50);}
 render();
-
-document.onscroll=()=>{h.style.translate=scrollY>46&&scrollY>y?'0 -100%':'';
-  y=scrollY;};
-
-dm.previousElementSibling.onclick=()=>{dm.showModal();
-  dm.firstElementChild.play();};
-dm.onclick=({target})=>{if (target==dm) dm.close();};
-dm.onclose=()=>dm.firstElementChild.pause();
 
 f.onsubmit=e=>{e.preventDefault();
   const cs={c:f.c.value.trim(),s:f.s.value.trim(),u:+(f.u.value||3),
@@ -348,7 +365,7 @@ f.onsubmit=e=>{e.preventDefault();
   for (const e of cS) if (cs.c==e.c&&cs.s==e.s&&i!=cS.indexOf(e)) {
     m('Already added'); f.s.focus(); return;}
   if (!/^[1-7](?:[1-9]|10)(?:,+[1-7](?:[1-9]|10))*$/.test(cs.P)) {
-    m(`<day><period>, comma-separated — see demo`); f.P.focus(); return;}
+    m(`<day><period>, comma-separated`); f.P.focus(); return;}
   cs.P=[...new Set(cs.P.split(/,+/))]
     .sort((a,b)=>a[0]*10+(+a.slice(1))-b[0]*10-b.slice(1));
   if (i==cS.length) {
@@ -392,7 +409,10 @@ t.onclick=({target})=>{
   if (target.classList.contains('be')) {i=target.dataset.i;
     for (const e of f.elements) if (e!=b) {e.value=cS[i][e.name];
       e.previousElementSibling.className='lu';}
-    f.c.focus(); b.classList.add('bs'); b.textContent=' Save';}
+    f.c.focus(); const P=f.P.value.split(/,+/);
+    for (const td of tD) td.style.background=
+      P.includes(`${td.parentElement.rowIndex}${td.cellIndex}`)?'#bec3c9':'';
+    b.classList.add('bs'); b.textContent=' Save';}
   else if (target.classList.contains('bd')) {cS.splice(target.dataset.i,1);
     ucS('out');}};
 
@@ -400,7 +420,29 @@ n.onchange=()=>{if (!+n.value) {n.value=localStorage.getItem('n')||1; return;}
   localStorage.setItem('n',Math.ceil(Math.abs(n.value)));
   render();};
 
-dl.onchange=()=>{localStorage.setItem('dl',dl.value); render('in');};
+dc.onchange=()=>{localStorage.setItem('dc',dc.value); render('in');};
+  };
+let y=scrollY;
+
+main();
+
+document.onscroll=()=>{h.style.translate=scrollY>46&&scrollY>y?'0 -100%':'';
+  y=scrollY;};
+
+h.firstElementChild.onclick=e=>{e.preventDefault(); main();};
+
+dm.previousElementSibling.onclick=()=>{dm.showModal();
+  dm.firstElementChild.play();};
+dm.onclick=({target})=>{if (target==dm) dm.close();};
+dm.onclose=()=>dm.firstElementChild.pause();
+
+dm.nextElementSibling.onclick=e=>{e.preventDefault(); /* location='starred'; */
+  ty.hidden=dm.nextElementSibling.hidden=true;
+  document.body.children[1].innerHTML=`<ol>${F.join('')}</ol>`;
+  for (const t of document.querySelectorAll('li')) t.ondblclick=()=>{
+    F.splice(F.indexOf(t.outerHTML),1);
+    localStorage.setItem('F',JSON.stringify(F));
+    if (F.length) t.remove(); else main();};};
   </script>
 </body>
 </html>
