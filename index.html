@@ -37,13 +37,13 @@ p {line-height: 1.5;}
 button {-webkit-tap-highlight-color: #0000;}
 
 header {padding-top: 2.875em;}
-header>div {background: #f9f9f9cc; backdrop-filter: blur(24px);
+header>nav {background: #f9f9f9cc; backdrop-filter: blur(24px);
   padding: .25em .75em; display: flex; align-items: center; column-gap: 1em;
   position: fixed; inset: 0 0 auto; z-index: 2;
   transition: translate .3s cubic-bezier(.33,1,.68,1);}
-@media (width>=36em) {header>div {padding-inline: calc((100% - 32.25em)/2);}}
-@media (width>=48em) {header>div {padding-inline: calc((100% - 43.5em)/2);}}
-@media (width>=62em) {header>div {padding-inline: calc((100% - 58.5em)/2);}}
+@media (width>=36em) {header>nav {padding-inline: calc((100% - 32.25em)/2);}}
+@media (width>=48em) {header>nav {padding-inline: calc((100% - 43.5em)/2);}}
+@media (width>=62em) {header>nav {padding-inline: calc((100% - 58.5em)/2);}}
 
 h1 {margin-block: 0; margin-right: auto;}
 h1>a {color: #596e79; text-decoration: none;}
@@ -178,12 +178,12 @@ footer>small {color: #000; padding-inline: .6em;}
 </head>
 <body>
   <header>
-    <div>
+    <nav>
       <h1><a href="/">SemSched</a></h1>
       <button>Demo</button>
       <dialog><video src="demo.mp4" controls></video></dialog>
       <a href="starred"></a>
-    </div>
+    </nav>
     <p>Find schedules with the fewest days or the most credits for next semester.</p>
   </header>
   <main></main>
@@ -198,8 +198,7 @@ footer>small {color: #000; padding-inline: .6em;}
   </footer>
   <script>
 'use strict';
-
-const h=document.querySelector('header>div'), dm=h.querySelector('dialog'),
+const h=document.querySelector('header>nav'), dm=h.querySelector('dialog'),
   ty=document.querySelector('header>p'), tyt=ty.textContent,
   F=JSON.parse(localStorage.getItem('F'))||[],
   main=()=>{
@@ -265,6 +264,32 @@ const f=document.forms[0], tD=f.P.nextElementSibling.querySelectorAll('td'),
   ol=l.nextElementSibling,
   T=ol.firstElementChild.content,
   cS=JSON.parse(localStorage.getItem('cS'))||[],
+  tab=O=>{l.style.setProperty('--p','100%');
+    if (O[0].length==1) {ol.nextElementSibling.hidden=false;
+      ol.nextElementSibling.textContent='No possible schedules';}
+    else {ol.textContent='';
+      for (const o of O) {
+        const t=T.cloneNode(true),
+          rows=t.firstElementChild.firstElementChild.firstElementChild.children;
+        rows[0].children[0].textContent=o[0]+'/'+(o.length-1);
+        for (const {c,s,u,P} of o.slice(1)) {let fp, lp; for (const p of P) {
+          if (p-lp==1||p-lp==9*p[0]+'1') {
+            rows[p[0]].children[p.slice(1)].hidden=true;
+            rows[fp[0]].children[fp[1]].colSpan++;}
+          else {fp=p;
+            rows[p[0]].children[p.slice(1)].textContent=c+(s?'-'+s:'')+' ('+u+')';}
+          lp=p;}}
+        ol.appendChild(t);}
+      for (const t of ol.children) t.ondblclick=()=>{
+        const o=t.outerHTML.replace(' class="f"',''), i=F.indexOf(o);
+        if (i==-1) F.push(o); else F.splice(i,1);
+        localStorage.setItem('F',JSON.stringify(F));
+        dm.nextElementSibling.hidden=!F.length; t.firstElementChild.className='f';
+        t.firstElementChild.animate([{offset:0,scale:135},{offset:.75,scale:15},
+          {offset:.9,opacity:1},{offset:1,opacity:0}],{pseudoElement:'::before',
+          duration:1000,easing:'ease',direction:i==-1?'normal':'reverse'})
+        .onfinish=()=>t.firstElementChild.removeAttribute('class');};}
+    setTimeout(()=>{l.hidden=true; l.style.setProperty('--p',0);});},
   render=skip=>{
     if (!cS.length) {
       l.hidden=ol.parentElement.hidden=t.parentElement.parentElement.hidden=true;
@@ -287,7 +312,7 @@ const f=document.forms[0], tD=f.P.nextElementSibling.querySelectorAll('td'),
         cS[e.dataset.i].d=!e.checked; ucS();};}
 
     if (skip=='out') return;
-    const ecS=cS.filter(({d})=>!d), C=[], S=[], O=[];
+    const ecS=cS.filter(({d})=>!d), C=[], S=[];
     if (!ecS.length) {l.hidden=ol.parentElement.hidden=true; return;}
     for (const cs of ecS)
       if (cs.c==C.at(-1)) S.at(-1).push(cs); else {C.push(cs.c); S.push([cs]);}
@@ -303,46 +328,12 @@ const f=document.forms[0], tD=f.P.nextElementSibling.querySelectorAll('td'),
         ol.textContent=''; l.hidden=true; return;}}
     ol.nextElementSibling.hidden=true; ol.parentElement.hidden=false;
     l.hidden=ecS.length/n.value**.05<30;
-    w?.terminate(); w=new Worker('w.js'); w.postMessage([S,C,n.value,dc.value]);
-    w.onmessage=({data:L})=>{
-      if (typeof L=='string') {l.style.setProperty('--p',L); return;}
-      l.style.setProperty('--p','100%');
-      if (L[0].length==1) {ol.nextElementSibling.hidden=false;
-        ol.nextElementSibling.textContent='No possible schedules';
-        L.length=0;}
-      else R:for (const r of
-        dc.value=='fewest days'?L.sort((a,b)=>b.length-a.length):L) {
-        O:for (const o of O) {
-          r:for (let i=1; i<r.length; i++) {
-            for (let j=i; j<o.length; j++)
-              if (r[i].c==o[j].c&&r[i].s==o[j].s) continue r;
-            continue O;}
-          continue R;}
-        O.push(r); if (O.length>99) break;}
-
-      ol.textContent='';
-      for (const o of O) {
-        const t=T.cloneNode(true),
-          rows=t.firstElementChild.firstElementChild.firstElementChild.children;
-        rows[0].children[0].textContent=o[0]+'/'+(o.length-1);
-        for (const {c,s,u,P} of o.slice(1)) {let fp, lp; for (const p of P) {
-          if (p-lp==1||p-lp==9*p[0]+'1') {
-            rows[p[0]].children[p.slice(1)].hidden=true;
-            rows[fp[0]].children[fp[1]].colSpan++;}
-          else {fp=p;
-            rows[p[0]].children[p.slice(1)].textContent=c+(s?'-'+s:'')+' ('+u+')';}
-          lp=p;}}
-        ol.appendChild(t);}
-      for (const t of ol.children) t.ondblclick=()=>{
-        const o=t.outerHTML.replace(' class="f"',''), i=F.indexOf(o);
-        if (i==-1) F.push(o); else F.splice(i,1);
-        localStorage.setItem('F',JSON.stringify(F));
-        dm.nextElementSibling.hidden=!F.length; t.firstElementChild.className='f';
-        t.firstElementChild.animate([{offset:0,scale:135},{offset:.75,scale:15},
-          {offset:.9,opacity:1},{offset:1,opacity:0}],{pseudoElement:'::before',
-          duration:1000,easing:'ease',direction:i==-1?'normal':'reverse'})
-        .onfinish=()=>t.firstElementChild.removeAttribute('class');};
-      setTimeout(()=>{l.hidden=true; l.style.setProperty('--p',0);});};},
+    if (skip=='O'&&localStorage.getItem('O'))
+      tab(JSON.parse(localStorage.getItem('O')));
+    else {localStorage.removeItem('O'); w?.terminate(); w=new Worker('w.js');
+      w.postMessage([S,C,n.value,dc.value]); w.onmessage=({data})=>{
+        if (typeof data=='string') l.style.setProperty('--p',data);
+        else {localStorage.setItem('O',JSON.stringify(data)); tab(data);}};}},
   ucS=skip=>{localStorage.setItem('cS',JSON.stringify(cS)); i=cS.length; f.reset();
     for (const e of f.elements) if (e!=b) e.previousElementSibling.className='';
     for (const td of tD) td.style.background='';
@@ -356,7 +347,7 @@ if (!cS.length) {let i=0; ty.className='ty';
   const I=setInterval(()=>{ty.textContent=tyt.slice(0,i);
     if (i++==tyt.length) {clearInterval(I); ty.className='';
       setTimeout(()=>dm.showModal(),4000)}},50);}
-render();
+render('O');
 
 f.onsubmit=e=>{e.preventDefault();
   const cs={c:f.c.value.trim(),s:f.s.value.trim(),u:+(f.u.value||3),
@@ -409,7 +400,7 @@ t.onclick=({target})=>{
   if (target.classList.contains('be')) {i=target.dataset.i;
     for (const e of f.elements) if (e!=b) {e.value=cS[i][e.name];
       e.previousElementSibling.className='lu';}
-    f.c.focus(); const P=f.P.value.split(/,+/);
+    f.c.focus(); const P=f.P.value.split(',');
     for (const td of tD) td.style.background=
       P.includes(`${td.parentElement.rowIndex}${td.cellIndex}`)?'#bec3c9':'';
     b.classList.add('bs'); b.textContent=' Save';}
@@ -418,7 +409,7 @@ t.onclick=({target})=>{
 
 n.onchange=()=>{if (!+n.value) {n.value=localStorage.getItem('n')||1; return;}
   localStorage.setItem('n',Math.ceil(Math.abs(n.value)));
-  render();};
+  render('in');};
 
 dc.onchange=()=>{localStorage.setItem('dc',dc.value); render('in');};
   };
