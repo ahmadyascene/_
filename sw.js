@@ -10,6 +10,7 @@ onactivate=e=>e.waitUntil(caches.keys()
   .then(C=>Promise.all(C.map(c=>{if (c!='1') return caches.delete(c);})))
   .then(()=>clients.claim()));
 onfetch=e=>{if (e.request.method!='GET') return;
-  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(E=>{
-    if (e.request.destination=='document') return caches.match('/404.html');
-    throw E;})));};
+  e.respondWith(caches.match(e.request,{ignoreSearch:e.request.destination=='document'})
+    .then(r=>r||fetch(e.request).catch(E=>{
+      if (e.request.destination=='document') return caches.match('/404.html');
+      throw E;})));};
