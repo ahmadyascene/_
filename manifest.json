@@ -2,6 +2,6 @@
   "icons":[{"src":"/manifest-192.png","sizes":"192x192","type":"image/png"},
     {"src":"/manifest-512.png","sizes":"512x512","type":"image/png"}],
   "start_url":"/","display":"standalone",
-  "theme_color":"#ffffff","background_color":"#0f1419",
+  "theme_color":"#0f1419","background_color":"#0f1419",
   "description":"Plan your best schedule for next semester. Register for enough credits to stay on track—and save a full day on campus.",
   "categories":["productivity","education"]}
