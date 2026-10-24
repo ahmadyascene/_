@@ -7,6 +7,6 @@
     {"src":"/manifest-512-maskable.png","sizes":"512x512","type":"image/png",
       "purpose":"maskable"}],
   "start_url":"/","display":"standalone",
-  "theme_color":"#ffffff","background_color":"#ffffff",
+  "theme_color":"#ffffff","background_color":"#0f1419",
   "description":"Plan your best schedule for next semester. Register for enough credits to stay on track—and save a full day on campus.",
   "categories":["productivity","education"]}
