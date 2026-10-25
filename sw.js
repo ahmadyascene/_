@@ -1,5 +1,5 @@
 'use strict';
-oninstall=e=>e.waitUntil(caches.open('10')
+oninstall=e=>e.waitUntil(caches.open('11')
   .then(c=>c.addAll(['/','/index.html','/w.js','/404.html',
     '/AlegreyaSansSC-Light.woff2','/AlegreyaSansSC-Regular.woff2','/AlegreyaSansSC-Medium.woff2','/AlegreyaSansSC-Bold.woff2','/AlegreyaSansSC-Black.woff2',
     '/fa-regular-400.woff2','/fa-solid-900.woff2',
@@ -7,7 +7,7 @@ oninstall=e=>e.waitUntil(caches.open('10')
     '/manifest.json','/manifest-192.png','/manifest-512.png']))
   .then(skipWaiting));
 onactivate=e=>e.waitUntil(caches.keys()
-  .then(C=>Promise.all(C.map(c=>{if (c!='10') return caches.delete(c);})))
+  .then(C=>Promise.all(C.map(c=>{if (c!='11') return caches.delete(c);})))
   .then(()=>clients.claim()));
 onfetch=e=>{if (e.request.method!='GET') return;
   e.respondWith(caches.match(e.request,{ignoreSearch:e.request.destination=='document'})
