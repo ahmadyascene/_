@@ -1,7 +1,7 @@
 {"name":"Semester Scheduler","short_name":"Scheduler",
+  "description":"Plan your best schedule for next semester, stay on track with credits, and spend fewer days on campus.",
+  "categories":["productivity","education"],
   "icons":[{"src":"/manifest-192.png","sizes":"192x192","type":"image/png"},
     {"src":"/manifest-512.png","sizes":"512x512","type":"image/png"}],
   "start_url":"/","display":"standalone",
-  "theme_color":"#0f1419","background_color":"#0f1419",
-  "description":"Plan your best schedule for next semester. Register for enough credits to stay on track—and save a full day on campus.",
-  "categories":["productivity","education"]}
+  "theme_color":"#0f1419","background_color":"#0f1419"}
